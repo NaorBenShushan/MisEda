@@ -40,11 +40,7 @@
   "logo": "http://www.deda.co.il/image.jpg",
   "gallery": ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"],
   "ownerId": "(ref) 5fdf28d668df51315c9911f2",
-  "reviews": [
-    "(ref) 5fdf28d668df51315c9911f2",
-    "(ref) 5fdf28d668df51315c9911f2",
-    "(ref) 5fdf28d668df51315c9911f2"
-  ],
+
   "rating": "average of all reviews (Jonas course)",
   "active": false
 }

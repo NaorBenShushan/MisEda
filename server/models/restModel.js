@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
+const restSchema = new mongoose.Schema({
   name: {
     type: String,
     minlength: [2, "שם המסעדה לא תקין"],
     maxlength: [15, "שם המסעדה לא תקין"],
     required: [true, "ציין את שם המסעדה"],
+    trim: true,
   },
 
   address: {
@@ -14,6 +15,7 @@ const userSchema = new mongoose.Schema({
       minlength: [2, "שם העיר לא תקין"],
       maxlength: [30, "שם העיר לא תקין"],
       required: [true, "ציין את שם העיר"],
+      trim: true,
     },
 
     street: {
@@ -21,6 +23,7 @@ const userSchema = new mongoose.Schema({
       minlength: [2, "שם הרחוב לא תקין"],
       maxlength: [30, "שם הרחוב לא תקין"],
       required: [true, "ציין את שם הרחוב"],
+      trim: true,
     },
 
     number: {
@@ -36,14 +39,15 @@ const userSchema = new mongoose.Schema({
     minlength: [7, "מספר הטלפון לא תקין"],
     maxlength: [20, "מספר הטלפון לא תקין"],
     required: [true, "ציין את הטלפון בבית העסק"],
-    unique: [true, "מספר הטלפון קיים במערכת"],
+    trim: true,
   },
 
-  decription: {
+  description: {
     type: String,
     minlength: [15, "תיאור העסק קצר מדי"],
     maxlength: [255, "תיאור העסק ארוך מדי"],
     required: [true, "תאר את העסק"],
+    trim: true,
   },
 
   community: {
@@ -51,10 +55,12 @@ const userSchema = new mongoose.Schema({
     minlength: [15, "תיאור העסק קצר מדי"],
     maxlength: [20, "תיאור העסק ארוך מדי"],
     required: [true, "ציין את עדת העסק"],
+    trim: true,
   },
 
   kosher: {
     type: Boolean,
+    required: [true, "ציין את כשרות העסק"],
   },
 
   openingHours: {
@@ -67,6 +73,8 @@ const userSchema = new mongoose.Schema({
         type: Number,
         maxlength: [4, "הזמן לא תקין"],
       },
+
+      required: [true, "ציין את שעות הפעילות"],
     },
     monday: {
       open: {
@@ -77,6 +85,7 @@ const userSchema = new mongoose.Schema({
         type: Number,
         maxlength: [4, "הזמן לא תקין"],
       },
+      required: [true, "ציין את שעות הפעילות"],
     },
     tuesday: {
       open: {
@@ -87,6 +96,7 @@ const userSchema = new mongoose.Schema({
         type: Number,
         maxlength: [4, "הזמן לא תקין"],
       },
+      required: [true, "ציין את שעות הפעילות"],
     },
     wednesday: {
       open: {
@@ -97,6 +107,7 @@ const userSchema = new mongoose.Schema({
         type: Number,
         maxlength: [4, "הזמן לא תקין"],
       },
+      required: [true, "ציין את שעות הפעילות"],
     },
     thursday: {
       open: {
@@ -107,6 +118,7 @@ const userSchema = new mongoose.Schema({
         type: Number,
         maxlength: [4, "הזמן לא תקין"],
       },
+      required: [true, "ציין את שעות הפעילות"],
     },
     friday: {
       open: {
@@ -117,6 +129,7 @@ const userSchema = new mongoose.Schema({
         type: Number,
         maxlength: [4, "הזמן לא תקין"],
       },
+      required: [true, "ציין את שעות הפעילות"],
     },
     saturday: {
       open: {
@@ -127,79 +140,58 @@ const userSchema = new mongoose.Schema({
         type: Number,
         maxlength: [4, "הזמן לא תקין"],
       },
+      required: [true, "ציין את שעות הפעילות"],
     },
   },
 
   menu: {
     type: String,
-    minlength: [4, "התפריט לא תקין"],
-    maxlength: [150, "התפריט לא תקין"],
+    minlength: [4, "הקישור לא תקין"],
+    maxlength: [150, "הקישור לא תקין"],
+    required: [true, "הזמן קישור לתפריט"],
+    trim: true,
   },
 
   website: {
     type: String,
     minlength: [7, "כתובת האתר לא תקינה"],
     maxlength: [150, "כתובת האתר לא תקינה"],
+    required: [true, "הזמן קישור לאתר המסעדה"],
+    trim: true,
   },
 
-  // Will be changed later
+  // Will be changed later (multer)
   logo: {
     type: String,
     minlength: 8,
     maxlength: 15,
     default: "user.jpeg",
+    required: [true, "הזמן קישור ללוגו המסעדה"],
+    trim: true,
   },
 
-  //How to add an array to the Schema?
-  /*     gallery: {
-      [ 
-        {type: String,
-         minlength: 8,
-         maxlength: 15,
-         default: "user.jpeg"},  
-        {type: String,
-         minlength: 8,
-         maxlength: 15,
-         default: "user2.jpeg"},  
-        {type: String,
-         minlength: 8,
-         maxlength: 15,
-         default: "user3.jpeg"}
-      ],      
-             }, */
+  gallery: [
+    { type: String, minlength: 8, maxlength: 15, default: "user.jpeg" },
+  ],
 
   ownerId: {
-    type: String,
-    minlength: 10,
-    maxlength: 255,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
   },
-
-  //How to add an array to the Schema?
-  /* reviews: {
-        [ 
-            {type: String,
-            minlength: 20,
-            maxlength: 1200},
-            {type: String,
-            minlength: 20,
-            maxlength: 1200},
-            {type: String,
-            minlength: 20,
-            maxlength: 1200},
-      ],            
-    }, */
 
   rating: {
     type: Number,
-    minlength: 1,
-    maxlength: 3,
+    min: 0,
+    max: 5,
   },
 
   active: {
     type: Boolean,
+    default: true,
+    select: false,
   },
 });
 
-const User = mongoose.model("User", userSchema);
+const Rest = mongoose.model("Rest", restSchema);
 
-module.exports = User;
+module.exports = Rest;

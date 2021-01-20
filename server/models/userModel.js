@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
     minlength: [2, "שם פרטי לא תקין"],
     maxlength: [15, "שם פרטי לא תקין"],
     required: [true, "ציין שם פרטי"],
+    trim: true,
   },
 
   lastName: {
@@ -13,12 +14,15 @@ const userSchema = new mongoose.Schema({
     minlength: [2, "שם פרטי לא תקין"],
     maxlength: [15, "שם פרטי לא תקין"],
     required: [true, "ציין שם משפחה"],
+    trim: true,
   },
 
   email: {
     type: String,
     minlength: [6, "אימייל לא תקין"],
     maxlength: [20, "אימייל לא תקין"],
+    lowercase: true,
+    trim: true,
     required: [true, "ציין אימייל"],
     unique: [true, "אימייל קיים במערכת"],
   },
@@ -52,7 +56,7 @@ const userSchema = new mongoose.Schema({
 
   restOwner: {
     type: Boolean,
-    required: [true, "אנא ציין האם אתה בעל מסעדה"],
+    required: [true, "ציין האם אתה בעל מסעדה"],
   },
 
   // Array of restaurants
