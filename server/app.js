@@ -1,3 +1,7 @@
+// Local modules
+const restRoutes = require('./routes/restRoutes');
+
+// 3rd party modules
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -22,8 +26,8 @@ app.use(cors());
 app.use(express.json());
 
 // Routers
+app.use('/restaurants', restRoutes);
 
 // Starting the server
 const PORT = process.env.PORT || 3000;
-console.log(PORT);
 app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
