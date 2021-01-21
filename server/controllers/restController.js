@@ -8,7 +8,7 @@ async function validateRest(rest) {
     address: yup.object().shape({
       city: yup.string().required().trim().min(2).max(20),
       street: yup.string().required().trim().min(2).max(20),
-      number: yup.number().required().min(1).max(200)
+      number: yup.number().required().min(1).max(200),
     }),
 
     phone: yup.string().required().trim().min(9).max(10),
@@ -22,42 +22,42 @@ async function validateRest(rest) {
     openingHours: yup.object().shape({
       sunday: yup.object().shape({
         open: yup.number().required().min(0).max(25),
-        close: yup.number().required().min(0).max(25)
+        close: yup.number().required().min(0).max(25),
       }),
 
       monday: yup.object().shape({
         open: yup.number().required().min(0).max(25),
-        close: yup.number().required().min(0).max(25)
+        close: yup.number().required().min(0).max(25),
       }),
 
       tuesday: yup.object().shape({
         open: yup.number().required().min(0).max(25),
-        close: yup.number().required().min(0).max(25)
+        close: yup.number().required().min(0).max(25),
       }),
 
       wednesday: yup.object().shape({
         open: yup.number().required().min(0).max(25),
-        close: yup.number().required().min(0).max(25)
+        close: yup.number().required().min(0).max(25),
       }),
 
       thursday: yup.object().shape({
         open: yup.number().required().min(0).max(25),
-        close: yup.number().required().min(0).max(25)
+        close: yup.number().required().min(0).max(25),
       }),
 
       friday: yup.object().shape({
         open: yup.number().required().min(0).max(25),
-        close: yup.number().required().min(0).max(25)
+        close: yup.number().required().min(0).max(25),
       }),
       saturday: yup.object().shape({
         open: yup.number().required().min(0).max(25),
-        close: yup.number().required().min(0).max(25)
-      })
+        close: yup.number().required().min(0).max(25),
+      }),
     }),
 
     menu: yup.string().required().trim().min(10).max(255).url(),
 
-    website: yup.string().required().trim().min(10).max(255).url()
+    website: yup.string().required().trim().min(10).max(255).url(),
 
     // ADD LOGO VALIDATION (MULTER)
     // ADD GALLERY VALIDATION (MULTER)
@@ -71,13 +71,13 @@ async function validateRest(rest) {
  *************** GET ALL RESTAURANTS **************
  **************************************************/
 exports.getAllRests = async (req, res) => {
-  const rests = await Rest.find({ active: true });
+  const rests = await Rest.find();
 
-  if (!rests) return res.status(404).send('לא נמצאו מסעדות');
+  if (!rests || rests.length === 0) return res.status(404).send('לא נמצאו מסעדות');
 
   res.status(200).json({
     results: rests.length,
-    data: rests
+    data: rests,
   });
 };
 
@@ -120,14 +120,14 @@ exports.updateRestById = async (req, res) => {
     // const user = req.user._id;
     await Rest.findByIdAndUpdate(
       {
-        _id: req.params.id
+        _id: req.params.id,
         // ownerId: user
       },
-      req.body
+      req.body,
     );
 
     const updatedRest = await Rest.findById({
-      _id: req.params.id
+      _id: req.params.id,
       // ownerId: user
     });
 
@@ -144,7 +144,7 @@ exports.deleteRestById = async (req, res) => {
   try {
     // const user = req.user._id;
     const rest = await Rest.findByIdAndRemove({
-      _id: req.params.id
+      _id: req.params.id,
       // ownerId: user
     });
 

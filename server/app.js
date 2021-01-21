@@ -1,5 +1,6 @@
 // Local modules
 const restRoutes = require('./routes/restRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 // 3rd party modules
 const express = require('express');
@@ -16,7 +17,7 @@ mongoose
   .connect('mongodb://localhost/misEda', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: false
+    useFindAndModify: false,
   })
   .then(() => console.log('Connected to MongoDB!'))
   .catch((err) => console.error(`${err}, could not connect.`));
@@ -28,6 +29,7 @@ app.use(express.json());
 
 // Routers
 app.use('/restaurants', restRoutes);
+app.use('/users', userRoutes);
 
 // Starting the server
 const PORT = process.env.PORT || 3000;
