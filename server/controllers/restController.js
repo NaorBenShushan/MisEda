@@ -1,4 +1,72 @@
 const Rest = require('../models/restModel');
+const yup = require('yup');
+
+async function validateRest(rest) {
+  let restSchema = yup.object().shape({
+    name: yup.string().required().trim().min(2).max(15),
+
+    address: yup.object().shape({
+      city: yup.string().required().trim().min(2).max(20),
+      street: yup.string().required().trim().min(2).max(20),
+      number: yup.number().required().min(1).max(200)
+    }),
+
+    phone: yup.string().required().trim().min(9).max(10),
+
+    description: yup.string().required().trim().min(15).max(255),
+
+    community: yup.string().required().trim().min(3).max(20),
+
+    kosher: yup.boolean().required(),
+
+    openingHours: yup.object().shape({
+      sunday: yup.object().shape({
+        open: yup.number().required().min(0).max(25),
+        close: yup.number().required().min(0).max(25)
+      }),
+
+      monday: yup.object().shape({
+        open: yup.number().required().min(0).max(25),
+        close: yup.number().required().min(0).max(25)
+      }),
+
+      tuesday: yup.object().shape({
+        open: yup.number().required().min(0).max(25),
+        close: yup.number().required().min(0).max(25)
+      }),
+
+      wednesday: yup.object().shape({
+        open: yup.number().required().min(0).max(25),
+        close: yup.number().required().min(0).max(25)
+      }),
+
+      thursday: yup.object().shape({
+        open: yup.number().required().min(0).max(25),
+        close: yup.number().required().min(0).max(25)
+      }),
+
+      friday: yup.object().shape({
+        open: yup.number().required().min(0).max(25),
+        close: yup.number().required().min(0).max(25)
+      }),
+      saturday: yup.object().shape({
+        open: yup.number().required().min(0).max(25),
+        close: yup.number().required().min(0).max(25)
+      })
+    }),
+
+    menu: yup.string().required().trim().min(10).max(255).url(),
+
+    website: yup.string().required().trim().min(10).max(255).url()
+
+    // ADD LOGO VALIDATION (MULTER)
+    // ADD GALLERY VALIDATION (MULTER)
+  });
+
+  // check validity
+  const res = await restSchema.isValid(rest);
+  console.log(res);
+}
 
 /**************************************************
  *************** GET ALL RESTAURANTS **************
@@ -31,13 +99,16 @@ exports.getRestById = async (req, res) => {
  **************************************************/
 exports.createRest = async (req, res) => {
   // Validate!!!!!!!!!
-  try {
-    const newDoc = await Rest.create(req.body);
+  const valid = await validateRest(req.body);
 
-    res.status(200).send(newDoc);
-  } catch (err) {
-    res.status(401).send(err);
-  }
+  res.send('hello');
+  //   try {
+  //     const newDoc = await Rest.create(req.body);
+
+  //     res.status(200).send(newDoc);
+  //   } catch (err) {
+  //     res.status(401).send(err);
+  //   }
 };
 
 /**************************************************
