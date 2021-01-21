@@ -15,7 +15,8 @@ const app = express();
 mongoose
   .connect('mongodb://localhost/misEda', {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
   })
   .then(() => console.log('Connected to MongoDB!'))
   .catch((err) => console.error(`${err}, could not connect.`));

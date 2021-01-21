@@ -208,13 +208,13 @@ const restSchema = new mongoose.Schema({
     type: Number,
     min: 0,
     max: 5
-  },
-
-  active: {
-    type: Boolean,
-    default: true,
-    select: false
   }
+
+  //   active: {
+  //     type: Boolean,
+  //     default: true,
+  //     select: false
+  //   }
 });
 
 const Rest = mongoose.model('Rest', restSchema);

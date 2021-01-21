@@ -64,8 +64,7 @@ async function validateRest(rest) {
   });
 
   // check validity
-  const res = await restSchema.isValid(rest);
-  console.log(res);
+  return restSchema.validate(rest);
 }
 
 /**************************************************
@@ -83,6 +82,22 @@ exports.getAllRests = async (req, res) => {
 };
 
 /**************************************************
+ **************** CREATE RESTAURANT ***************
+ **************************************************/
+exports.createRest = async (req, res) => {
+  try {
+    // Validate body
+    await validateRest(req.body);
+
+    const newDoc = await Rest.create(req.body);
+
+    res.status(201).send(newDoc);
+  } catch (err) {
+    res.status(400).send(err.errors);
+  }
+};
+
+/**************************************************
  *************** GET RESTAURANT BY ID *************
  **************************************************/
 exports.getRestById = async (req, res) => {
@@ -95,29 +110,51 @@ exports.getRestById = async (req, res) => {
 };
 
 /**************************************************
- **************** CREATE RESTAURANT ***************
+ ************* UPDATE RESTAURANT BY ID ************
  **************************************************/
-exports.createRest = async (req, res) => {
-  // Validate!!!!!!!!!
-  const valid = await validateRest(req.body);
+exports.updateRestById = async (req, res) => {
+  try {
+    // Validate body
+    await validateRest(req.body);
 
-  res.send('hello');
-  //   try {
-  //     const newDoc = await Rest.create(req.body);
+    // const user = req.user._id;
+    await Rest.findByIdAndUpdate(
+      {
+        _id: req.params.id
+        // ownerId: user
+      },
+      req.body
+    );
 
-  //     res.status(200).send(newDoc);
-  //   } catch (err) {
-  //     res.status(401).send(err);
-  //   }
+    const updatedRest = await Rest.findById({
+      _id: req.params.id
+      // ownerId: user
+    });
+
+    res.status(200).send(updatedRest);
+  } catch (err) {
+    res.status(400).send(err.errors);
+  }
 };
 
 /**************************************************
- **************** UPDATE RESTAURANT ***************
+ ************* DELETE RESTAURANT BY ID ************
  **************************************************/
+exports.deleteRestById = async (req, res) => {
+  try {
+    // const user = req.user._id;
+    const rest = await Rest.findByIdAndRemove({
+      _id: req.params.id
+      // ownerId: user
+    });
 
-/**************************************************
- **************** DELETE RESTAURANT ***************
- **************************************************/
+    if (!rest) return res.status(404).send('The rest with the given ID was not found.');
+
+    res.status(204).send('המסעדה נמחקה בהצלחה');
+  } catch (err) {
+    res.status(404).send('המסעדה לא נמצאה');
+  }
+};
 
 /**************************************************
  ************** GET TOP 5 RESTAURANTS *************
