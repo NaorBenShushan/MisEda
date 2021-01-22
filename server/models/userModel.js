@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
   firstName: {
@@ -31,7 +33,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'ציין סיסמא'],
     minlength: [8, 'סיסמא קצרה מידי'],
-    maxlength: [20, 'סיסמא ארוכה מידי'],
+    maxlength: [1000, 'סיסמא ארוכה מידי'],
+    select: false,
   },
 
   //   passwordConfirm: {
@@ -44,7 +47,7 @@ const userSchema = new mongoose.Schema({
   // Will be changed later
   profilePicture: {
     type: String,
-    minlength: 8,
+    minlength: 4,
     maxlength: 15,
     default: 'user.jpeg',
   },
@@ -67,6 +70,16 @@ const userSchema = new mongoose.Schema({
     },
   ],
 });
+
+userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+userSchema.methods.generateAuthToken = function () {
+  const token = jwt.sign({ _id: this._id, restOwner: this.restOwner }, process.env.JWTKEY);
+
+  return token;
+};
 
 const User = mongoose.model('User', userSchema);
 

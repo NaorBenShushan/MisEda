@@ -143,14 +143,19 @@ exports.updateRestById = async (req, res) => {
 exports.deleteRestById = async (req, res) => {
   try {
     // const user = req.user._id;
-    const rest = await Rest.findByIdAndRemove({
-      _id: req.params.id,
-      // ownerId: user
-    });
+    const rest = await Rest.findByIdAndUpdate(
+      {
+        _id: req.params.id,
+        // ownerId: user
+      },
+      { active: false },
+    );
 
-    if (!rest) return res.status(404).send('The rest with the given ID was not found.');
+    console.log(rest);
 
-    res.status(204).send('המסעדה נמחקה בהצלחה');
+    if (!rest) return res.status(404).send('המסעדה לא נמצאה');
+
+    res.status(200).send('המסעדה נמחקה בהצלחה');
   } catch (err) {
     res.status(404).send('המסעדה לא נמצאה');
   }

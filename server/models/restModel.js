@@ -6,7 +6,7 @@ const restSchema = new mongoose.Schema({
     required: [true, 'ציין את שם המסעדה'],
     trim: true,
     minlength: [2, 'שם המסעדה לא תקין'],
-    maxlength: [15, 'שם המסעדה לא תקין']
+    maxlength: [15, 'שם המסעדה לא תקין'],
   },
 
   address: {
@@ -15,7 +15,7 @@ const restSchema = new mongoose.Schema({
       required: [true, 'ציין את שם העיר'],
       trim: true,
       minlength: [2, 'שם העיר לא תקין'],
-      maxlength: [20, 'שם העיר לא תקין']
+      maxlength: [20, 'שם העיר לא תקין'],
     },
 
     street: {
@@ -23,15 +23,15 @@ const restSchema = new mongoose.Schema({
       required: [true, 'ציין את שם הרחוב'],
       trim: true,
       minlength: [2, 'שם הרחוב לא תקין'],
-      maxlength: [20, 'שם הרחוב לא תקין']
+      maxlength: [20, 'שם הרחוב לא תקין'],
     },
 
     number: {
       type: Number,
       required: [true, 'ציין את המספר'],
       minlength: [1, 'מספר לא תקין'],
-      maxlength: [4, 'מספר לא תקין']
-    }
+      maxlength: [4, 'מספר לא תקין'],
+    },
   },
 
   phone: {
@@ -39,7 +39,7 @@ const restSchema = new mongoose.Schema({
     required: [true, 'ציין את הטלפון בבית העסק'],
     trim: true,
     minlength: [9, 'מספר הטלפון לא תקין'],
-    maxlength: [10, 'מספר הטלפון לא תקין']
+    maxlength: [10, 'מספר הטלפון לא תקין'],
   },
 
   description: {
@@ -47,7 +47,7 @@ const restSchema = new mongoose.Schema({
     required: [true, 'תאר את העסק'],
     trim: true,
     minlength: [15, 'תיאור העסק קצר מדי'],
-    maxlength: [255, 'תיאור העסק ארוך מדי']
+    maxlength: [255, 'תיאור העסק ארוך מדי'],
   },
 
   community: {
@@ -55,12 +55,12 @@ const restSchema = new mongoose.Schema({
     required: [true, 'ציין את עדת העסק'],
     trim: true,
     minlength: [3, 'עדה קצרה מדי'],
-    maxlength: [20, 'עדה ארוכה מדי']
+    maxlength: [20, 'עדה ארוכה מדי'],
   },
 
   kosher: {
     type: Boolean,
-    required: [true, 'ציין את כשרות העסק']
+    required: [true, 'ציין את כשרות העסק'],
   },
 
   openingHours: {
@@ -69,14 +69,14 @@ const restSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'ציין את שעות הפעילות'],
         min: [0, 'הזמן לא תקין'],
-        max: [25, 'הזמן לא תקין']
+        max: [25, 'הזמן לא תקין'],
       },
       close: {
         type: Number,
         required: [true, 'ציין את שעות הפעילות'],
         min: [0, 'הזמן לא תקין'],
-        max: [25, 'הזמן לא תקין']
-      }
+        max: [25, 'הזמן לא תקין'],
+      },
     },
 
     monday: {
@@ -84,14 +84,14 @@ const restSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'ציין את שעות הפעילות'],
         min: [0, 'הזמן לא תקין'],
-        max: [25, 'הזמן לא תקין']
+        max: [25, 'הזמן לא תקין'],
       },
       close: {
         type: Number,
         required: [true, 'ציין את שעות הפעילות'],
         min: [0, 'הזמן לא תקין'],
-        max: [25, 'הזמן לא תקין']
-      }
+        max: [25, 'הזמן לא תקין'],
+      },
     },
 
     tuesday: {
@@ -99,14 +99,14 @@ const restSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'ציין את שעות הפעילות'],
         min: [0, 'הזמן לא תקין'],
-        max: [25, 'הזמן לא תקין']
+        max: [25, 'הזמן לא תקין'],
       },
       close: {
         type: Number,
         required: [true, 'ציין את שעות הפעילות'],
         min: [0, 'הזמן לא תקין'],
-        max: [25, 'הזמן לא תקין']
-      }
+        max: [25, 'הזמן לא תקין'],
+      },
     },
 
     wednesday: {
@@ -114,14 +114,14 @@ const restSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'ציין את שעות הפעילות'],
         min: [0, 'הזמן לא תקין'],
-        max: [25, 'הזמן לא תקין']
+        max: [25, 'הזמן לא תקין'],
       },
       close: {
         type: Number,
         required: [true, 'ציין את שעות הפעילות'],
         min: [0, 'הזמן לא תקין'],
-        max: [25, 'הזמן לא תקין']
-      }
+        max: [25, 'הזמן לא תקין'],
+      },
     },
 
     thursday: {
@@ -129,14 +129,14 @@ const restSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'ציין את שעות הפעילות'],
         min: [0, 'הזמן לא תקין'],
-        max: [25, 'הזמן לא תקין']
+        max: [25, 'הזמן לא תקין'],
       },
       close: {
         type: Number,
         required: [true, 'ציין את שעות הפעילות'],
         min: [0, 'הזמן לא תקין'],
-        max: [25, 'הזמן לא תקין']
-      }
+        max: [25, 'הזמן לא תקין'],
+      },
     },
 
     friday: {
@@ -144,14 +144,14 @@ const restSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'ציין את שעות הפעילות'],
         min: [0, 'הזמן לא תקין'],
-        max: [25, 'הזמן לא תקין']
+        max: [25, 'הזמן לא תקין'],
       },
       close: {
         type: Number,
         required: [true, 'ציין את שעות הפעילות'],
         min: [0, 'הזמן לא תקין'],
-        max: [25, 'הזמן לא תקין']
-      }
+        max: [25, 'הזמן לא תקין'],
+      },
     },
 
     saturday: {
@@ -159,15 +159,15 @@ const restSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'ציין את שעות הפעילות'],
         min: [0, 'הזמן לא תקין'],
-        max: [25, 'הזמן לא תקין']
+        max: [25, 'הזמן לא תקין'],
       },
       close: {
         type: Number,
         required: [true, 'ציין את שעות הפעילות'],
         min: [0, 'הזמן לא תקין'],
-        max: [25, 'הזמן לא תקין']
-      }
-    }
+        max: [25, 'הזמן לא תקין'],
+      },
+    },
   },
 
   menu: {
@@ -175,7 +175,7 @@ const restSchema = new mongoose.Schema({
     required: [true, 'הזמן קישור לתפריט'],
     trim: true,
     minlength: [10, 'הקישור לא תקין'],
-    maxlength: [150, 'הקישור לא תקין']
+    maxlength: [150, 'הקישור לא תקין'],
   },
 
   website: {
@@ -183,7 +183,7 @@ const restSchema = new mongoose.Schema({
     minlength: [4, 'כתובת האתר לא תקינה'],
     maxlength: [150, 'כתובת האתר לא תקינה'],
     required: [true, 'הזמן קישור לאתר המסעדה'],
-    trim: true
+    trim: true,
   },
 
   // Will be changed later (multer)
@@ -193,28 +193,28 @@ const restSchema = new mongoose.Schema({
     trim: true,
     minlength: 3,
     maxlength: 30,
-    default: 'user.jpeg'
+    default: 'user.jpeg',
   },
 
   gallery: [{ type: String, minlength: 8, maxlength: 15, default: 'user.jpeg' }],
 
   ownerId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
     // required: [true, 'Restaurant must have an owner'],
   },
 
   rating: {
     type: Number,
     min: 0,
-    max: 5
-  }
+    max: 5,
+  },
 
-  //   active: {
-  //     type: Boolean,
-  //     default: true,
-  //     select: false
-  //   }
+  active: {
+    type: Boolean,
+    default: true,
+    // select: false,
+  },
 });
 
 const Rest = mongoose.model('Rest', restSchema);

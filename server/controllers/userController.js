@@ -1,7 +1,7 @@
 const User = require('../models/userModel');
 const yup = require('yup');
 
-async function validateUser(user) {
+exports.validateUserOnRegister = async (user) => {
   let userSchema = yup.object().shape({
     firstName: yup.string().required().trim().min(2).max(15),
 
@@ -19,7 +19,18 @@ async function validateUser(user) {
 
   // check validity
   return userSchema.validate(user);
-}
+};
+
+exports.validateUserOnLogin = async (user) => {
+  let userSchema = yup.object().shape({
+    email: yup.string().required().trim().min(6).max(20).email().lowercase(),
+
+    password: yup.string().required().min(8).max(20),
+  });
+
+  // check validity
+  return userSchema.validate(user);
+};
 
 /**************************************************
  ****************** GET ALL USERS *****************
@@ -34,10 +45,6 @@ exports.getAllUsers = async (req, res) => {
     data: users,
   });
 };
-
-/**************************************************
- ******************* CREATE USER ******************
- **************************************************/
 
 /**************************************************
  ****************** GET USER BY ID ****************
