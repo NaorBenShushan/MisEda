@@ -4,13 +4,18 @@ const {
   getRestById,
   createRest,
   updateRestById,
-  deleteRestById
+  deleteRestById,
 } = require('../controllers/restController');
+const { protectMW } = require('../controllers/authController');
 
 const router = express.Router();
 
-router.route('/').get(getAllRests).post(createRest);
+router.route('/').get(getAllRests).post(protectMW, createRest);
 
-router.route('/:id').get(getRestById).put(updateRestById).delete(deleteRestById);
+router
+  .route('/:id')
+  .get(getRestById)
+  .put(protectMW, updateRestById)
+  .delete(protectMW, deleteRestById);
 
 module.exports = router;
