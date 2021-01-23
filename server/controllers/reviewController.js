@@ -1,7 +1,11 @@
 const Review = require('../models/reviewModel');
+const Rest = require('../models/restModel');
 const yup = require('yup');
 
-exports.validateReview = async (review) => {
+// helps to check if given object ID is valid
+var ObjectId = require('mongoose').Types.ObjectId;
+
+const validateReview = async (review) => {
   let reviewSchema = yup.object().shape({
     title: yup.string().required().trim().min(3).max(25),
 
@@ -40,12 +44,7 @@ exports.getReviewsByRestId = async (req, res) => {
 exports.createReviewByRestId = async (req, res) => {
   try {
     // Validate body
-    // let newReview = await validateReview(req.body);
-    let newReview = req.body;
-
-    console.log(newReview);
-    console.log(req.user._id);
-    console.log(req.params.id);
+    let newReview = await validateReview(req.body);
 
     // clean body from sensitive values
     delete newReview._id;
@@ -54,6 +53,20 @@ exports.createReviewByRestId = async (req, res) => {
     delete newReview.restId;
     delete newReview.createdAt;
 
+    // checking if rest id is valid
+    if (!ObjectId.isValid(req.params.id)) {
+      return res.status(404).send('אין מסעדה כזו');
+    }
+
+    // check if rest exists
+    const rest = await Rest.findOne({ _id: req.params.id, active: true });
+
+    if (!rest) return res.status(404).send('המסעדה המבוקשת לא נמצאה');
+
+    // check if user already reviewed this rest ??
+    // if so, need to add to review model an array of users who reviewed the rest,
+    // and then check here if the ID exists there
+
     // restrict to **NOT** rest owners only
     if (req.user.restOwner) return res.status(401).send('אין לך הרשאות לבצע פעולה זו');
 
@@ -61,7 +74,7 @@ exports.createReviewByRestId = async (req, res) => {
     newReview.userId = req.user._id;
     newReview.restId = req.params.id;
 
-    // creating new review
+    // create new review
     await Review.create(newReview);
 
     // send response with new restaurant

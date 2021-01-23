@@ -20,7 +20,7 @@ const reviewSchema = new mongoose.Schema({
   rating: {
     type: Number,
     required: [true, 'סקירה חייבת לכלול דירוג'],
-    min: 1,
+    min: 0,
     max: 5,
   },
 
