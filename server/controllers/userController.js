@@ -17,7 +17,8 @@ exports.validateUserOnRegister = async (user) => {
   });
 
   // check validity
-  return userSchema.validate(user);
+  // abortEarly make validation for all fields and send all errors instead of one at a time
+  return userSchema.validate(user, { abortEarly: false });
 };
 
 exports.validateUserOnLogin = async (user) => {
@@ -28,7 +29,8 @@ exports.validateUserOnLogin = async (user) => {
   });
 
   // check validity
-  return userSchema.validate(user);
+  // abortEarly make validation for all fields and send all errors instead of one at a time
+  return userSchema.validate(user, { abortEarly: false });
 };
 
 /**************************************************

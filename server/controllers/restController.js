@@ -64,7 +64,8 @@ async function validateRest(rest) {
   });
 
   // check validity
-  return restSchema.validate(rest);
+  // abortEarly make validation for all fields and send all errors instead of one at a time
+  return restSchema.validate(rest, { abortEarly: false });
 }
 
 /**************************************************
@@ -155,7 +156,7 @@ exports.updateRestById = async (req, res) => {
     // everything is OK, send response
     res.status(200).send(updatedRest);
   } catch (err) {
-    res.status(400).send(err);
+    res.status(400).send(err.errors);
   }
 };
 

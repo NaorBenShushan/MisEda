@@ -15,7 +15,8 @@ const validateReview = async (review) => {
   });
 
   // check validity
-  return reviewSchema.validate(review);
+  // abortEarly make validation for all fields and send all errors instead of one at a time
+  return reviewSchema.validate(review, { abortEarly: false });
 };
 
 /**************************************************
