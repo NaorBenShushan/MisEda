@@ -65,7 +65,7 @@ exports.createReviewByRestId = async (req, res) => {
     if (!rest) return res.status(404).send('המסעדה המבוקשת לא נמצאה');
 
     // check if user already reviewed this rest ??
-    // if so, need to add to review model an array of users who reviewed the rest,
+    // if so, we need to add to rest model an array of users who reviewed the rest,
     // and then check here if the ID exists there
 
     // restrict to **NOT** rest owners only
