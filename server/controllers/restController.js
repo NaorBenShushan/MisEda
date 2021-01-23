@@ -92,6 +92,11 @@ exports.createRest = async (req, res) => {
     // getting user from protect MW and adding it to the rest object
     newRest.ownerId = req.user._id;
 
+    // restrict to rest owners only
+    //
+    //
+    //
+
     // creating new restaurant
     await Rest.create(newRest);
 
@@ -120,27 +125,31 @@ exports.getRestById = async (req, res) => {
 exports.updateRestById = async (req, res) => {
   try {
     // Validate body
-    await validateRest(req.body);
+    const body = await validateRest(req.body);
 
-    const user = req.user._id;
-    console.log(user);
+    // clean body from sensitive values
+    delete body.active;
+    delete body._id;
+    delete body.ownerId;
+    delete body.rating;
 
-    await Rest.findByIdAndUpdate(
-      {
-        _id: req.params.id,
-        // ownerId: user
-      },
-      req.body,
-    );
+    // getting user id from protect MW
+    const userId = req.user._id;
 
-    const updatedRest = await Rest.findById({
-      _id: req.params.id,
-      // ownerId: user
-    });
+    // trying to update rest with given rest & user IDs
+    const rest = await Rest.findOneAndUpdate({ _id: req.params.id, ownerId: userId }, body);
 
+    // if failed:
+    // 1. not the same owner
+    // 2. rest does not exist
+    if (!rest) return res.status(404).send('המסעדה לא נמצאה');
+
+    const updatedRest = await Rest.findById(req.params.id);
+
+    // everything is OK, send response
     res.status(200).send(updatedRest);
   } catch (err) {
-    res.status(400).send(err.errors);
+    res.status(400).send(err);
   }
 };
 
@@ -149,22 +158,24 @@ exports.updateRestById = async (req, res) => {
  **************************************************/
 exports.deleteRestById = async (req, res) => {
   try {
-    // const user = req.user._id;
-    const rest = await Rest.findByIdAndUpdate(
-      {
-        _id: req.params.id,
-        // ownerId: user
-      },
+    // getting user id from protect MW
+    const user = req.user._id;
+
+    // trying to update 'active' field rest with given rest & user IDs
+    const rest = await Rest.findOneAndUpdate(
+      { _id: req.params.id, ownerId: user },
       { active: false },
     );
 
-    console.log(rest);
+    // if failed:
+    // 1. not the same owner
+    // 2. rest does not exist
+    if (!rest) return res.status(404).send('!!!המסעדה לא נמצאה');
 
-    if (!rest) return res.status(404).send('המסעדה לא נמצאה');
-
+    // everything is OK, send response
     res.status(200).send('המסעדה נמחקה בהצלחה');
   } catch (err) {
-    res.status(404).send('המסעדה לא נמצאה');
+    res.status(400).send(err);
   }
 };
 
