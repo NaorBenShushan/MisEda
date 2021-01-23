@@ -87,11 +87,16 @@ exports.getAllRests = async (req, res) => {
 exports.createRest = async (req, res) => {
   try {
     // Validate body
-    await validateRest(req.body);
+    let newRest = await validateRest(req.body);
 
-    const newDoc = await Rest.create(req.body);
+    // getting user from protect MW and adding it to the rest object
+    newRest.ownerId = req.user._id;
 
-    res.status(201).send(newDoc);
+    // creating new restaurant
+    await Rest.create(newRest);
+
+    // send response with new restaurant
+    res.status(201).send(newRest);
   } catch (err) {
     res.status(400).send(err.errors);
   }
@@ -117,7 +122,9 @@ exports.updateRestById = async (req, res) => {
     // Validate body
     await validateRest(req.body);
 
-    // const user = req.user._id;
+    const user = req.user._id;
+    console.log(user);
+
     await Rest.findByIdAndUpdate(
       {
         _id: req.params.id,

@@ -201,7 +201,7 @@ const restSchema = new mongoose.Schema({
   ownerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    // required: [true, 'Restaurant must have an owner'],
+    required: [true, 'Restaurant must have an owner'],
   },
 
   rating: {
