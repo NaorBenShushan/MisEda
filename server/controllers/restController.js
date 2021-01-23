@@ -89,8 +89,15 @@ exports.createRest = async (req, res) => {
     // Validate body
     let newRest = await validateRest(req.body);
 
+    // clean body from sensitive values
+    delete newRest._id;
+    delete newRest.active;
+    delete newRest.ownerId;
+    delete newRest.rating;
+    delete newRest.createdAt;
+
     // restrict to rest owners only
-    if (!req.user.restOwner) return res.status(403).send('אין לך הרשאות לבצע פעולה זו');
+    if (!req.user.restOwner) return res.status(401).send('אין לך הרשאות לבצע פעולה זו');
 
     // getting user from protect MW and adding it to the rest object
     newRest.ownerId = req.user._id;
@@ -126,10 +133,11 @@ exports.updateRestById = async (req, res) => {
     const body = await validateRest(req.body);
 
     // clean body from sensitive values
-    delete body.active;
     delete body._id;
+    delete body.active;
     delete body.ownerId;
     delete body.rating;
+    delete body.createdAt;
 
     // getting user id from protect MW
     const userId = req.user._id;

@@ -1,6 +1,7 @@
 // Local modules
 const restRoutes = require('./routes/restRoutes');
 const userRoutes = require('./routes/userRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 
 // 3rd party modules
 const express = require('express');
@@ -31,6 +32,7 @@ app.use(express.json());
 // Routers
 app.use('/restaurants', restRoutes);
 app.use('/users', userRoutes);
+app.use('/reviews', reviewRoutes);
 
 // Starting the server
 const PORT = process.env.PORT || 3000;

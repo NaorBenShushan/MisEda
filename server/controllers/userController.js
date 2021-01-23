@@ -35,18 +35,14 @@ exports.validateUserOnLogin = async (user) => {
  ****************** GET ALL USERS *****************
  **************************************************/
 exports.getAllUsers = async (req, res) => {
-  try {
-    const users = await User.find();
+  const users = await User.find();
 
-    if (!users || users.length === 0) return res.status(404).send('לא נמצאו משתמשים');
+  if (!users || users.length === 0) return res.status(404).send('לא נמצאו משתמשים');
 
-    res.status(200).json({
-      results: users.length,
-      data: users,
-    });
-  } catch (err) {
-    res.status(401).send('בלה בלה');
-  }
+  res.status(200).json({
+    results: users.length,
+    data: users,
+  });
 };
 
 /**************************************************

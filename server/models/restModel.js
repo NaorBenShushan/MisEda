@@ -210,6 +210,11 @@ const restSchema = new mongoose.Schema({
     max: 5,
   },
 
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+
   active: {
     type: Boolean,
     default: true,

@@ -37,13 +37,6 @@ const userSchema = new mongoose.Schema({
     select: false,
   },
 
-  //   passwordConfirm: {
-  //     type: String,
-  //     required: [true, 'ציין סיסמא שנית'],
-  //     minlength: [8, 'סיסמא קצרה מידי'],
-  //     maxlength: [15, 'סיסמא ארוכה מידי'],
-  //   },
-
   // Will be changed later
   profilePicture: {
     type: String,
@@ -63,12 +56,7 @@ const userSchema = new mongoose.Schema({
   },
 
   // Array of restaurants
-  favorites: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Restaurants',
-    },
-  ],
+  favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Restaurants' }],
 });
 
 userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {

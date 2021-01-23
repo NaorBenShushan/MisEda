@@ -9,20 +9,26 @@ const bcrypt = require('bcrypt');
 exports.register = async (req, res) => {
   try {
     // Validate body
-    await validateUserOnRegister(req.body);
+    let body = await validateUserOnRegister(req.body);
 
-    const user = await User.findOne({ email: req.body.email });
-    if (user) res.status(400).send('אימייל קיים במערכת');
+    // check if there is a user with the email sent
+    const user = await User.findOne({ email: body.email });
+    if (user) return res.status(400).send('אימייל קיים במערכת');
 
-    const newDoc = req.body;
+    // clean body from sensitive values
+    delete body._id;
+    delete body.favorites;
+    delete body.createdAt;
 
     // Hash password
     const salt = await bcrypt.genSalt(12);
-    newDoc.password = await bcrypt.hash(newDoc.password, salt);
+    body.password = await bcrypt.hash(body.password, salt);
 
-    await User.create(newDoc);
+    // create document
+    await User.create(body);
 
-    res.status(201).send(newDoc);
+    // send response
+    res.status(201).send(body);
   } catch (err) {
     res.status(400).send(err.errors);
   }
