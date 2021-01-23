@@ -89,13 +89,11 @@ exports.createRest = async (req, res) => {
     // Validate body
     let newRest = await validateRest(req.body);
 
+    // restrict to rest owners only
+    if (!req.user.restOwner) return res.status(403).send('אין לך הרשאות לבצע פעולה זו');
+
     // getting user from protect MW and adding it to the rest object
     newRest.ownerId = req.user._id;
-
-    // restrict to rest owners only
-    //
-    //
-    //
 
     // creating new restaurant
     await Rest.create(newRest);
