@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Rest = require('../models/restModel');
 
 const reviewSchema = new mongoose.Schema({
   title: {
@@ -20,7 +21,7 @@ const reviewSchema = new mongoose.Schema({
   rating: {
     type: Number,
     required: [true, 'סקירה חייבת לכלול דירוג'],
-    min: 0,
+    min: 1,
     max: 5,
   },
 
@@ -40,6 +41,46 @@ const reviewSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+});
+
+reviewSchema.statics.calculateAverageRatings = async function (restId) {
+  const stats = await this.aggregate([
+    { $match: { restId } },
+    { $group: { _id: '$restId', nRating: { $sum: 1 }, avgRating: { $avg: '$rating' } } },
+  ]);
+
+  // console.log(stats);
+
+  if (stats.length) {
+    await Rest.findByIdAndUpdate(restId, {
+      ratingsQuantity: stats[0].nRating,
+      ratingsAverage: stats[0].avgRating,
+    });
+  } else {
+    await Rest.findByIdAndUpdate(restId, {
+      ratingsQuantity: 0,
+      ratingsAverage: 1,
+    });
+  }
+};
+
+// calculate ratingsAverage & ratingsQuantity after creating a new review
+reviewSchema.post('save', function () {
+  // this points to current review
+  this.constructor.calculateAverageRatings(this.restId);
+});
+
+// calculate ratingsAverage & ratingsQuantity after updating & deleting a review (2 functions below!)
+reviewSchema.pre(/^findOneAnd/, async function (next) {
+  this.r = await this.findOne();
+
+  console.log(this.r);
+
+  next();
+});
+
+reviewSchema.post(/^findOneAnd/, async function () {
+  await this.r.constructor.calcAverageRatings(this.r.restId);
 });
 
 const Review = mongoose.model('Review', reviewSchema);

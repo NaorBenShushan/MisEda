@@ -204,10 +204,19 @@ const restSchema = new mongoose.Schema({
     required: [true, 'Restaurant must have an owner'],
   },
 
-  rating: {
+  usersReviewed: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+
+  ratingsAverage: {
     type: Number,
-    min: 0,
+    min: 1,
     max: 5,
+    default: 1,
+    set: (val) => Math.round(val * 10) / 10,
+  },
+
+  ratingsQuantity: {
+    type: Number,
+    default: 0,
   },
 
   createdAt: {

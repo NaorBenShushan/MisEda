@@ -94,8 +94,10 @@ exports.createRest = async (req, res) => {
     delete newRest._id;
     delete newRest.active;
     delete newRest.ownerId;
-    delete newRest.rating;
+    delete newRest.ratingsAverage;
     delete newRest.createdAt;
+    delete newRest.usersReviewed;
+    delete newRest.ratingsQuantity;
 
     // restrict to rest owners only
     if (!req.user.restOwner) return res.status(401).send('אין לך הרשאות לבצע פעולה זו');
@@ -137,8 +139,10 @@ exports.updateRestById = async (req, res) => {
     delete body._id;
     delete body.active;
     delete body.ownerId;
-    delete body.rating;
+    delete body.ratingsAverage;
     delete body.createdAt;
+    delete body.usersReviewed;
+    delete body.ratingsQuantity;
 
     // getting user id from protect MW
     const userId = req.user._id;

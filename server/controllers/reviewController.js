@@ -11,7 +11,7 @@ const validateReview = async (review) => {
 
     content: yup.string().required().trim().min(3).max(255),
 
-    rating: yup.number().required().min(0).max(5),
+    rating: yup.number().required().min(1).max(5),
   });
 
   // check validity
@@ -24,9 +24,7 @@ const validateReview = async (review) => {
  **************************************************/
 exports.getReviewsByRestId = async (req, res) => {
   try {
-    const reviews = await Review.find({ restId: req.params.id });
-
-    console.log(reviews);
+    const reviews = await Review.find({ restId: req.params.id }).populate('userId');
 
     if (!reviews || reviews.length === 0) return res.status(404).send('לא נמצאו ביקורות למסעדה זו');
 
@@ -49,7 +47,6 @@ exports.createReviewByRestId = async (req, res) => {
 
     // clean body from sensitive values
     delete newReview._id;
-    delete newReview.active;
     delete newReview.userId;
     delete newReview.restId;
     delete newReview.createdAt;
@@ -64,9 +61,14 @@ exports.createReviewByRestId = async (req, res) => {
 
     if (!rest) return res.status(404).send('המסעדה המבוקשת לא נמצאה');
 
-    // check if user already reviewed this rest ??
-    // if so, we need to add to rest model an array of users who reviewed the rest,
-    // and then check here if the ID exists there
+    // check if user already reviewed this rest
+    if (rest.usersReviewed.includes(req.user._id)) {
+      return res.status(400).send('כבר ביקרת את המסעדה הזו בעבר');
+    }
+
+    // if user didn't review this rest yet, add his ID to the array
+    rest.usersReviewed.push(req.user._id);
+    await rest.save();
 
     // restrict to **NOT** rest owners only
     if (req.user.restOwner) return res.status(401).send('אין לך הרשאות לבצע פעולה זו');
@@ -78,7 +80,7 @@ exports.createReviewByRestId = async (req, res) => {
     // create new review
     await Review.create(newReview);
 
-    // send response with new restaurant
+    // send response with new review
     res.status(201).send(newReview);
   } catch (err) {
     res.status(400).send(err.errors);
@@ -92,6 +94,48 @@ exports.createReviewByRestId = async (req, res) => {
 /**************************************************
  *************** UPDATE REVIEW BY ID **************
  **************************************************/
+exports.updateReviewByRestId = async (req, res) => {
+  try {
+    // Validate body
+    let sentReview = await validateReview(req.body);
+
+    // clean body from sensitive values
+    delete sentReview._id;
+    delete sentReview.userId;
+    delete sentReview.restId;
+    delete sentReview.createdAt;
+
+    // checking if rest id is valid
+    if (!ObjectId.isValid(req.params.id)) {
+      return res.status(404).send('אין מסעדה כזו');
+    }
+
+    // check if rest exists
+    const rest = await Rest.findOne({ _id: req.params.id, active: true });
+
+    if (!rest) return res.status(404).send('המסעדה המבוקשת לא נמצאה');
+
+    // restrict to **NOT** rest owners only
+    if (req.user.restOwner) return res.status(401).send('אין לך הרשאות לבצע פעולה זו');
+
+    // update review
+    const reviewToUpdate = await Review.findOneAndUpdate(
+      { restId: req.params.id, userId: req.user._id },
+      sentReview,
+    );
+
+    // console.log(reviewToUpdate);
+
+    if (!reviewToUpdate) return res.status(404).send('הביקורת לא נמצאה');
+
+    const updatedReview = await Review.findOne({ restId: req.params.id, userId: req.user._id });
+
+    // send response with new review
+    res.status(200).send(updatedReview);
+  } catch (err) {
+    res.status(400).send(err.errors);
+  }
+};
 
 /**************************************************
  *************** DELETE REVIEW BY ID **************
