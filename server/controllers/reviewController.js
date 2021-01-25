@@ -142,6 +142,11 @@ exports.updateReviewByRestId = async (req, res) => {
     // console.log(reviewToUpdate);
 
     if (!reviewToUpdate) return res.status(404).send("הביקורת לא נמצאה");
+      { restId: req.params.id, userId: req.user.id },
+      sentReview,
+    );
+
+    if (!reviewToUpdate) return res.status(404).send('הביקורת לא נמצאה');
 
     const updatedReview = await Review.findOne({
       restId: req.params.id,

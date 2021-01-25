@@ -49,8 +49,6 @@ reviewSchema.statics.calculateAverageRatings = async function (restId) {
     { $group: { _id: '$restId', nRating: { $sum: 1 }, avgRating: { $avg: '$rating' } } },
   ]);
 
-  // console.log(stats);
-
   if (stats.length) {
     await Rest.findByIdAndUpdate(restId, {
       ratingsQuantity: stats[0].nRating,
@@ -74,13 +72,11 @@ reviewSchema.post('save', function () {
 reviewSchema.pre(/^findOneAnd/, async function (next) {
   this.r = await this.findOne();
 
-  console.log(this.r);
-
   next();
 });
 
 reviewSchema.post(/^findOneAnd/, async function () {
-  await this.r.constructor.calcAverageRatings(this.r.restId);
+  await this.r.constructor.calculateAverageRatings(this.r.restId);
 });
 
 const Review = mongoose.model('Review', reviewSchema);
