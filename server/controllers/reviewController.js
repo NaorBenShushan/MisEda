@@ -1,17 +1,27 @@
-const Review = require('../models/reviewModel');
-const Rest = require('../models/restModel');
-const yup = require('yup');
+const Review = require("../models/reviewModel");
+const Rest = require("../models/restModel");
+const yup = require("yup");
 
 // helps to check if given object ID is valid
-var ObjectId = require('mongoose').Types.ObjectId;
+var ObjectId = require("mongoose").Types.ObjectId;
 
 const validateReview = async (review) => {
   let reviewSchema = yup.object().shape({
-    title: yup.string().required().trim().min(3).max(25),
+    title: yup
+      .string()
+      .required("יש להזין כותרת")
+      .trim()
+      .min(3, "כותרת קצרה מדי")
+      .max(25, "כותרת ארוכה מדי"),
 
-    content: yup.string().required().trim().min(3).max(255),
+    content: yup
+      .string()
+      .required("יש להזין תוכן")
+      .trim()
+      .min(3, "תוכן קצר מדי")
+      .max(255, "תוכן ארוך מדי"),
 
-    rating: yup.number().required().min(1).max(5),
+    rating: yup.number().required("יש להזין דירוג").min(1).max(5),
   });
 
   // check validity
@@ -24,16 +34,19 @@ const validateReview = async (review) => {
  **************************************************/
 exports.getReviewsByRestId = async (req, res) => {
   try {
-    const reviews = await Review.find({ restId: req.params.id }).populate('userId');
+    const reviews = await Review.find({ restId: req.params.id }).populate(
+      "userId"
+    );
 
-    if (!reviews || reviews.length === 0) return res.status(404).send('לא נמצאו ביקורות למסעדה זו');
+    if (!reviews || reviews.length === 0)
+      return res.status(404).send("לא נמצאו ביקורות למסעדה זו");
 
     res.status(200).json({
       results: reviews.length,
       data: reviews,
     });
   } catch (err) {
-    res.status(401).send('בלה בלה');
+    res.status(401).send("בלה בלה");
   }
 };
 
@@ -53,17 +66,17 @@ exports.createReviewByRestId = async (req, res) => {
 
     // checking if rest id is valid
     if (!ObjectId.isValid(req.params.id)) {
-      return res.status(404).send('אין מסעדה כזו');
+      return res.status(404).send("אין מסעדה כזו");
     }
 
     // check if rest exists
     const rest = await Rest.findOne({ _id: req.params.id, active: true });
 
-    if (!rest) return res.status(404).send('המסעדה המבוקשת לא נמצאה');
+    if (!rest) return res.status(404).send("המסעדה המבוקשת לא נמצאה");
 
     // check if user already reviewed this rest
     if (rest.usersReviewed.includes(req.user._id)) {
-      return res.status(400).send('כבר ביקרת את המסעדה הזו בעבר');
+      return res.status(400).send("כבר ביקרת את המסעדה הזו בעבר");
     }
 
     // if user didn't review this rest yet, add his ID to the array
@@ -71,7 +84,8 @@ exports.createReviewByRestId = async (req, res) => {
     await rest.save();
 
     // restrict to **NOT** rest owners only
-    if (req.user.restOwner) return res.status(401).send('אין לך הרשאות לבצע פעולה זו');
+    if (req.user.restOwner)
+      return res.status(401).send("אין לך הרשאות לבצע פעולה זו");
 
     // getting user + rest from protect MW and adding it to the review object
     newReview.userId = req.user._id;
@@ -107,28 +121,32 @@ exports.updateReviewByRestId = async (req, res) => {
 
     // checking if rest id is valid
     if (!ObjectId.isValid(req.params.id)) {
-      return res.status(404).send('אין מסעדה כזו');
+      return res.status(404).send("אין מסעדה כזו");
     }
 
     // check if rest exists
     const rest = await Rest.findOne({ _id: req.params.id, active: true });
 
-    if (!rest) return res.status(404).send('המסעדה המבוקשת לא נמצאה');
+    if (!rest) return res.status(404).send("המסעדה המבוקשת לא נמצאה");
 
     // restrict to **NOT** rest owners only
-    if (req.user.restOwner) return res.status(401).send('אין לך הרשאות לבצע פעולה זו');
+    if (req.user.restOwner)
+      return res.status(401).send("אין לך הרשאות לבצע פעולה זו");
 
     // update review
     const reviewToUpdate = await Review.findOneAndUpdate(
       { restId: req.params.id, userId: req.user._id },
-      sentReview,
+      sentReview
     );
 
     // console.log(reviewToUpdate);
 
-    if (!reviewToUpdate) return res.status(404).send('הביקורת לא נמצאה');
+    if (!reviewToUpdate) return res.status(404).send("הביקורת לא נמצאה");
 
-    const updatedReview = await Review.findOne({ restId: req.params.id, userId: req.user._id });
+    const updatedReview = await Review.findOne({
+      restId: req.params.id,
+      userId: req.user._id,
+    });
 
     // send response with new review
     res.status(200).send(updatedReview);
