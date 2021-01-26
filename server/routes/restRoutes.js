@@ -8,7 +8,7 @@ const {
 } = require('../controllers/restController');
 const { protectMW } = require('../controllers/authController');
 
-// multer - logo
+// multer
 const multer = require('multer');
 var path = require('path');
 
