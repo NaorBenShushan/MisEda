@@ -7,6 +7,7 @@ const reviewRoutes = require('./routes/reviewRoutes');
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
 // Store development variable in .env file
 const dotenv = require('dotenv').config();
@@ -26,8 +27,11 @@ mongoose
 
 // Prevent CORS errors!
 app.use(cors());
+
 // Body parser to JSON format
-app.use(express.json());
+app.use('/uploads', express.static('uploads'));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // Routers
 app.use('/restaurants', restRoutes);

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+// const slugify = require('slugify');
 
 const restSchema = new mongoose.Schema({
   name: {
@@ -8,6 +9,8 @@ const restSchema = new mongoose.Schema({
     minlength: [2, 'שם המסעדה לא תקין'],
     maxlength: [15, 'שם המסעדה לא תקין'],
   },
+
+  // slug: String,
 
   address: {
     city: {
@@ -29,8 +32,8 @@ const restSchema = new mongoose.Schema({
     number: {
       type: Number,
       required: [true, 'ציין את המספר'],
-      minlength: [1, 'מספר לא תקין'],
-      maxlength: [4, 'מספר לא תקין'],
+      min: [1, 'מספר לא תקין'],
+      max: [1000, 'מספר לא תקין'],
     },
   },
 
@@ -186,17 +189,12 @@ const restSchema = new mongoose.Schema({
     trim: true,
   },
 
-  // Will be changed later (multer)
   logo: {
     type: String,
-    // required: [true, 'הזן קישור ללוגו המסעדה'],
-    trim: true,
-    minlength: 3,
-    maxlength: 30,
-    default: 'user.jpeg',
+    required: true,
   },
 
-  gallery: [{ type: String, minlength: 8, maxlength: 15, default: 'user.jpeg' }],
+  gallery: [{ type: String, required: true }],
 
   ownerId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -211,7 +209,7 @@ const restSchema = new mongoose.Schema({
     min: 1,
     max: 5,
     default: 1,
-    set: (val) => Math.round(val * 10) / 10,
+    set: (val) => Math.trunc(val * 10) / 10,
   },
 
   ratingsQuantity: {
@@ -227,9 +225,17 @@ const restSchema = new mongoose.Schema({
   active: {
     type: Boolean,
     default: true,
-    // select: false,
   },
 });
+
+// make 'slug' field unique
+// restSchema.index({ slug: 1 });
+
+// restSchema.pre('save', function (next) {
+//   this.slug = slugify(this.name, { lower: true, locale: 'heb', replacement: '-' });
+
+//   next();
+// });
 
 const Rest = mongoose.model('Rest', restSchema);
 

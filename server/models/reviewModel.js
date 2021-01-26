@@ -23,6 +23,7 @@ const reviewSchema = new mongoose.Schema({
     required: [true, 'סקירה חייבת לכלול דירוג'],
     min: 1,
     max: 5,
+    set: (val) => Math.trunc(val * 10) / 10,
   },
 
   userId: {

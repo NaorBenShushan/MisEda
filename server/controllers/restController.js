@@ -1,165 +1,151 @@
-const Rest = require("../models/restModel");
-const yup = require("yup");
+const Rest = require('../models/restModel');
+const yup = require('yup');
 
 async function validateRest(rest) {
   let restSchema = yup.object().shape({
-    name: yup
-      .string()
-      .required("יש להזין שם")
-      .trim()
-      .min(2, "שם קצר מדי")
-      .max(15, "שם ארוך מדי"),
+    name: yup.string().required('יש להזין שם').trim().min(2, 'שם קצר מדי').max(15, 'שם ארוך מדי'),
 
     address: yup.object().shape({
       city: yup
         .string()
-        .required("יש להזין את שם העיר")
+        .required('יש להזין את שם העיר')
         .trim()
-        .min(2, "שם העיר קצר מדי")
-        .max(20, "שם העיר ארוך מדי"),
+        .min(2, 'שם העיר קצר מדי')
+        .max(20, 'שם העיר ארוך מדי'),
       street: yup
         .string()
         .required()
         .trim()
-        .min(2, "שם הרחוב קצר מדי")
-        .max(20, "שם הרחוב ארוך מדי"),
-      number: yup
-        .number()
-        .required()
-        .min(1, "מס' הרחוב קצר מדי")
-        .max(5, "מספר הרחוב ארוך מדי"),
+        .min(2, 'שם הרחוב קצר מדי')
+        .max(20, 'שם הרחוב ארוך מדי'),
+      number: yup.number().required().min(1, "מס' הרחוב קצר מדי").max(1000, "מס' הרחוב ארוך מדי"),
     }),
 
     phone: yup
       .string()
-      .required("יש להזין מספר טלפון")
+      .required('יש להזין מספר טלפון')
       .trim()
       .min(9, "מס' הטלפון קצר מדי")
       .max(10, "מס' הטלפון ארוך מדי"),
 
-    description: yup
-      .string()
-      .required("יש להזין תיאור למסעדה")
-      .trim()
-      .min(15, "")
-      .max(255),
+    description: yup.string().required('יש להזין תיאור למסעדה').trim().min(15, '').max(255),
 
     community: yup
       .string()
-      .required("יש להזין עדה")
+      .required('יש להזין עדה')
       .trim()
-      .min(3, "שם העדה קצר מדי")
-      .max(20, "שם העדה ארוך מדי"),
+      .min(3, 'שם העדה קצר מדי')
+      .max(20, 'שם העדה ארוך מדי'),
 
-    kosher: yup.boolean().required("יש להזין מצב כשרות"),
+    kosher: yup.boolean().required('יש להזין מצב כשרות'),
 
     openingHours: yup.object().shape({
       sunday: yup.object().shape({
         open: yup
           .number()
-          .required("יש לציין שעות פתיחה")
-          .min(0, "שעת הפתיחה קצרה מדי")
-          .max(25, "שעת הפתיחה ארוכה מדי"),
+          .required('יש לציין שעות פתיחה')
+          .min(0, 'שעת הפתיחה קצרה מדי')
+          .max(25, 'שעת הפתיחה ארוכה מדי'),
         close: yup
           .number()
-          .required("יש לציין שעות סגירה")
-          .min(0, "שעת הסגירה קצרה מדי")
-          .max(25, "שעת הסגירה ארוכה מדי"),
+          .required('יש לציין שעות סגירה')
+          .min(0, 'שעת הסגירה קצרה מדי')
+          .max(25, 'שעת הסגירה ארוכה מדי'),
       }),
 
       monday: yup.object().shape({
         open: yup
           .number()
-          .required("יש לציין שעות פתיחה")
-          .min(0, "שעת הפתיחה קצרה מדי")
-          .max(25, "שעת הפתיחה ארוכה מדי"),
+          .required('יש לציין שעות פתיחה')
+          .min(0, 'שעת הפתיחה קצרה מדי')
+          .max(25, 'שעת הפתיחה ארוכה מדי'),
         close: yup
           .number()
-          .required("יש לציין שעות סגירה")
-          .min(0, "שעת הסגירה קצרה מדי")
-          .max(25, "שעת הסגירה ארוכה מדי"),
+          .required('יש לציין שעות סגירה')
+          .min(0, 'שעת הסגירה קצרה מדי')
+          .max(25, 'שעת הסגירה ארוכה מדי'),
       }),
 
       tuesday: yup.object().shape({
         open: yup
           .number()
-          .required("יש לציין שעות פתיחה")
-          .min(0, "שעת הפתיחה קצרה מדי")
-          .max(25, "שעת הפתיחה ארוכה מדי"),
+          .required('יש לציין שעות פתיחה')
+          .min(0, 'שעת הפתיחה קצרה מדי')
+          .max(25, 'שעת הפתיחה ארוכה מדי'),
         close: yup
           .number()
-          .required("יש לציין שעות סגירה")
-          .min(0, "שעת הסגירה קצרה מדי")
-          .max(25, "שעת הסגירה ארוכה מדי"),
+          .required('יש לציין שעות סגירה')
+          .min(0, 'שעת הסגירה קצרה מדי')
+          .max(25, 'שעת הסגירה ארוכה מדי'),
       }),
 
       wednesday: yup.object().shape({
         open: yup
           .number()
-          .required("יש לציין שעות פתיחה")
-          .min(0, "שעת הפתיחה קצרה מדי")
-          .max(25, "שעת הפתיחה ארוכה מדי"),
+          .required('יש לציין שעות פתיחה')
+          .min(0, 'שעת הפתיחה קצרה מדי')
+          .max(25, 'שעת הפתיחה ארוכה מדי'),
         close: yup
           .number()
-          .required("יש לציין שעות סגירה")
-          .min(0, "שעת הסגירה קצרה מדי")
-          .max(25, "שעת הסגירה ארוכה מדי"),
+          .required('יש לציין שעות סגירה')
+          .min(0, 'שעת הסגירה קצרה מדי')
+          .max(25, 'שעת הסגירה ארוכה מדי'),
       }),
 
       thursday: yup.object().shape({
         open: yup
           .number()
-          .required("יש לציין שעות פתיחה")
-          .min(0, "שעת הפתיחה קצרה מדי")
-          .max(25, "שעת הפתיחה ארוכה מדי"),
+          .required('יש לציין שעות פתיחה')
+          .min(0, 'שעת הפתיחה קצרה מדי')
+          .max(25, 'שעת הפתיחה ארוכה מדי'),
         close: yup
           .number()
-          .required("יש לציין שעות סגירה")
-          .min(0, "שעת הסגירה קצרה מדי")
-          .max(25, "שעת הסגירה ארוכה מדי"),
+          .required('יש לציין שעות סגירה')
+          .min(0, 'שעת הסגירה קצרה מדי')
+          .max(25, 'שעת הסגירה ארוכה מדי'),
       }),
 
       friday: yup.object().shape({
         open: yup
           .number()
-          .required("יש לציין שעות פתיחה")
-          .min(0, "שעת הפתיחה קצרה מדי")
-          .max(25, "שעת הפתיחה ארוכה מדי"),
+          .required('יש לציין שעות פתיחה')
+          .min(0, 'שעת הפתיחה קצרה מדי')
+          .max(25, 'שעת הפתיחה ארוכה מדי'),
         close: yup
           .number()
-          .required("יש לציין שעות סגירה")
-          .min(0, "שעת הסגירה קצרה מדי")
-          .max(25, "שעת הסגירה ארוכה מדי"),
+          .required('יש לציין שעות סגירה')
+          .min(0, 'שעת הסגירה קצרה מדי')
+          .max(25, 'שעת הסגירה ארוכה מדי'),
       }),
 
       saturday: yup.object().shape({
         open: yup
           .number()
-          .required("יש לציין שעות פתיחה")
-          .min(0, "שעת הפתיחה קצרה מדי")
-          .max(25, "שעת הפתיחה ארוכה מדי"),
+          .required('יש לציין שעות פתיחה')
+          .min(0, 'שעת הפתיחה קצרה מדי')
+          .max(25, 'שעת הפתיחה ארוכה מדי'),
         close: yup
           .number()
-          .required("יש לציין שעות סגירה")
-          .min(0, "שעת הסגירה קצרה מדי")
-          .max(25, "שעת הסגירה ארוכה מדי"),
+          .required('יש לציין שעות סגירה')
+          .min(0, 'שעת הסגירה קצרה מדי')
+          .max(25, 'שעת הסגירה ארוכה מדי'),
       }),
     }),
 
     menu: yup
       .string()
-      .required("יש לצרף קישור לתפריט")
+      .required('יש לצרף קישור לתפריט')
       .trim()
-      .min(7, "הקישור לתפריט קצר מדי")
-      .max(255, "הקישור לתפריט ארוך מדי")
+      .min(7, 'הקישור לתפריט קצר מדי')
+      .max(255, 'הקישור לתפריט ארוך מדי')
       .url(),
 
     website: yup
       .string()
-      .required("יש לצרף קישור לאתר המסעדה")
+      .required('יש לצרף קישור לאתר המסעדה')
       .trim()
-      .min(7, "הקישור לאתר קצר מדי")
-      .max(255, "הקישור לאתר ארוך מדי")
+      .min(7, 'הקישור לאתר קצר מדי')
+      .max(255, 'הקישור לאתר ארוך מדי')
       .url(),
 
     // ADD LOGO VALIDATION (MULTER)
@@ -177,8 +163,7 @@ async function validateRest(rest) {
 exports.getAllRests = async (req, res) => {
   const rests = await Rest.find();
 
-  if (!rests || rests.length === 0)
-    return res.status(404).send("לא נמצאו מסעדות");
+  if (!rests || rests.length === 0) return res.status(404).send('לא נמצאו מסעדות');
 
   res.status(200).json({
     results: rests.length,
@@ -191,21 +176,61 @@ exports.getAllRests = async (req, res) => {
  **************************************************/
 exports.createRest = async (req, res) => {
   try {
-    // Validate body
-    let newRest = await validateRest(req.body);
+    // create gallery paths array
+    let galleryPaths = req.files.gallery.map((gal) => gal.path);
 
-    // clean body from sensitive values
-    delete newRest._id;
-    delete newRest.active;
-    delete newRest.ownerId;
-    delete newRest.ratingsAverage;
-    delete newRest.createdAt;
-    delete newRest.usersReviewed;
-    delete newRest.ratingsQuantity;
+    // create object to create - therefore no need to clean
+    let newRest = {
+      name: req.body.name,
+      address: {
+        city: req.body.addressCity,
+        street: req.body.addressStreet,
+        number: req.body.addressNumber,
+      },
+      phone: req.body.phone,
+      description: req.body.description,
+      community: req.body.community,
+      kosher: req.body.kosher,
+      openingHours: {
+        sunday: {
+          open: req.body.ohSundayOpen,
+          close: req.body.ohSundayClose,
+        },
+        monday: {
+          open: req.body.ohMondayOpen,
+          close: req.body.ohMondayClose,
+        },
+        tuesday: {
+          open: req.body.ohTuesdayOpen,
+          close: req.body.ohTuesdayClose,
+        },
+        wednesday: {
+          open: req.body.ohWednesdayOpen,
+          close: req.body.ohWednesdayClose,
+        },
+        thursday: {
+          open: req.body.ohThursdayOpen,
+          close: req.body.ohThursdayClose,
+        },
+        friday: {
+          open: req.body.ohFridayOpen,
+          close: req.body.ohFridayClose,
+        },
+        saturday: {
+          open: req.body.ohSaturdayOpen,
+          close: req.body.ohSaturdayClose,
+        },
+      },
+      menu: req.body.menu,
+      website: req.body.website,
+      logo: req.files.logo[0].path,
+      gallery: galleryPaths,
+    };
+
+    await validateRest(newRest);
 
     // restrict to rest owners only
-    if (!req.user.restOwner)
-      return res.status(401).send("אין לך הרשאות לבצע פעולה זו");
+    if (!req.user.restOwner) return res.status(401).send('אין לך הרשאות לבצע פעולה זו');
 
     // getting user from protect MW and adding it to the rest object
     newRest.ownerId = req.user._id;
@@ -227,7 +252,7 @@ exports.getRestById = async (req, res) => {
   const restId = req.params.id;
   const rest = await Rest.findOne({ _id: restId, active: true });
 
-  if (!rest) return res.status(404).send("המסעדה המבוקשת לא נמצאה");
+  if (!rest) return res.status(404).send('המסעדה המבוקשת לא נמצאה');
 
   res.status(200).send(rest);
 };
@@ -235,6 +260,13 @@ exports.getRestById = async (req, res) => {
 /**************************************************
  ************* UPDATE RESTAURANT BY ID ************
  **************************************************/
+
+/*
+when update:
+	if ( new files ) => upload (multer) + update rest document in DB
+	else => update rest document in DB (without logo/gallery)
+*/
+
 exports.updateRestById = async (req, res) => {
   try {
     // Validate body
@@ -248,20 +280,18 @@ exports.updateRestById = async (req, res) => {
     delete body.createdAt;
     delete body.usersReviewed;
     delete body.ratingsQuantity;
+    delete body.slug;
 
     // getting user id from protect MW
     const userId = req.user._id;
 
     // trying to update rest with given rest & user IDs
-    const rest = await Rest.findOneAndUpdate(
-      { _id: req.params.id, ownerId: userId },
-      body
-    );
+    const rest = await Rest.findOneAndUpdate({ _id: req.params.id, ownerId: userId }, body);
 
     // if failed:
     // 1. not the same owner
     // 2. rest does not exist
-    if (!rest) return res.status(404).send("המסעדה לא נמצאה");
+    if (!rest) return res.status(404).send('המסעדה לא נמצאה');
 
     const updatedRest = await Rest.findById(req.params.id);
 
@@ -283,16 +313,16 @@ exports.deleteRestById = async (req, res) => {
     // trying to update 'active' field rest with given rest & user IDs
     const rest = await Rest.findOneAndUpdate(
       { _id: req.params.id, ownerId: user },
-      { active: false }
+      { active: false },
     );
 
     // if failed:
     // 1. not the same owner
     // 2. rest does not exist
-    if (!rest) return res.status(404).send("!!!המסעדה לא נמצאה");
+    if (!rest) return res.status(404).send('!!!המסעדה לא נמצאה');
 
     // everything is OK, send response
-    res.status(200).send("המסעדה נמחקה בהצלחה");
+    res.status(200).send('המסעדה נמחקה בהצלחה');
   } catch (err) {
     res.status(400).send(err);
   }
