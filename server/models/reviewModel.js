@@ -1,26 +1,26 @@
-const mongoose = require('mongoose');
-const Rest = require('../models/restModel');
+const mongoose = require("mongoose");
+const Rest = require("../models/restModel");
 
 const reviewSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: [true, 'נא להזין כותרת'],
+    required: [true, "נא להזין כותרת"],
     trim: true,
-    minlength: [3, 'כותרת לא תקינה'],
-    maxlength: [25, 'כותרת לא תקינה'],
+    minlength: [3, "כותרת לא תקינה"],
+    maxlength: [25, "כותרת לא תקינה"],
   },
 
   content: {
     type: String,
-    required: [true, 'נא להזין תוכן לסקירה'],
+    required: [true, "נא להזין תוכן לסקירה"],
     trim: true,
-    minlength: [3, 'תוכן לא תקין'],
-    maxlength: [255, 'תוכן לא תקין'],
+    minlength: [3, "תוכן לא תקין"],
+    maxlength: [255, "תוכן לא תקין"],
   },
 
   rating: {
     type: Number,
-    required: [true, 'סקירה חייבת לכלול דירוג'],
+    required: [true, "סקירה חייבת לכלול דירוג"],
     min: 1,
     max: 5,
     set: (val) => Math.trunc(val * 10) / 10,
@@ -28,14 +28,14 @@ const reviewSchema = new mongoose.Schema({
 
   userId: {
     type: mongoose.Schema.ObjectId,
-    ref: 'User',
-    required: [true, 'Review must belong to a user'],
+    ref: "User",
+    required: [true],
   },
 
   restId: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Rest',
-    required: [true, 'Review must belong to a tour'],
+    ref: "Rest",
+    required: [true],
   },
 
   createdAt: {
@@ -47,7 +47,13 @@ const reviewSchema = new mongoose.Schema({
 reviewSchema.statics.calculateAverageRatings = async function (restId) {
   const stats = await this.aggregate([
     { $match: { restId } },
-    { $group: { _id: '$restId', nRating: { $sum: 1 }, avgRating: { $avg: '$rating' } } },
+    {
+      $group: {
+        _id: "$restId",
+        nRating: { $sum: 1 },
+        avgRating: { $avg: "$rating" },
+      },
+    },
   ]);
 
   if (stats.length) {
@@ -64,7 +70,7 @@ reviewSchema.statics.calculateAverageRatings = async function (restId) {
 };
 
 // calculate ratingsAverage & ratingsQuantity after creating a new review
-reviewSchema.post('save', function () {
+reviewSchema.post("save", function () {
   // this points to current review
   this.constructor.calculateAverageRatings(this.restId);
 });
@@ -80,6 +86,6 @@ reviewSchema.post(/^findOneAnd/, async function () {
   await this.r.constructor.calculateAverageRatings(this.r.restId);
 });
 
-const Review = mongoose.model('Review', reviewSchema);
+const Review = mongoose.model("Review", reviewSchema);
 
 module.exports = Review;
