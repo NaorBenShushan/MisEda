@@ -28,7 +28,12 @@ async function validateRest(rest) {
       .min(9, "מס' הטלפון קצר מדי")
       .max(10, "מס' הטלפון ארוך מדי"),
 
-    description: yup.string().required('יש להזין תיאור למסעדה').trim().min(15, '').max(255),
+    description: yup
+      .string()
+      .required('יש להזין תיאור למסעדה')
+      .trim()
+      .min(15, 'תיאור קצר מידי')
+      .max(255, 'תיאור ארוך מידי'),
 
     community: yup
       .string()
@@ -227,6 +232,7 @@ exports.createRest = async (req, res) => {
       gallery: galleryPaths,
     };
 
+    // validate body
     await validateRest(newRest);
 
     // restrict to rest owners only
@@ -260,27 +266,56 @@ exports.getRestById = async (req, res) => {
 /**************************************************
  ************* UPDATE RESTAURANT BY ID ************
  **************************************************/
-
-/*
-when update:
-	if ( new files ) => upload (multer) + update rest document in DB
-	else => update rest document in DB (without logo/gallery)
-*/
-
 exports.updateRestById = async (req, res) => {
   try {
-    // Validate body
-    const body = await validateRest(req.body);
+    // create object to create - therefore no need to clean
+    const body = {
+      name: req.body.name,
+      address: {
+        city: req.body.addressCity,
+        street: req.body.addressStreet,
+        number: req.body.addressNumber,
+      },
+      phone: req.body.phone,
+      description: req.body.description,
+      community: req.body.community,
+      kosher: req.body.kosher,
+      openingHours: {
+        sunday: {
+          open: req.body.ohSundayOpen,
+          close: req.body.ohSundayClose,
+        },
+        monday: {
+          open: req.body.ohMondayOpen,
+          close: req.body.ohMondayClose,
+        },
+        tuesday: {
+          open: req.body.ohTuesdayOpen,
+          close: req.body.ohTuesdayClose,
+        },
+        wednesday: {
+          open: req.body.ohWednesdayOpen,
+          close: req.body.ohWednesdayClose,
+        },
+        thursday: {
+          open: req.body.ohThursdayOpen,
+          close: req.body.ohThursdayClose,
+        },
+        friday: {
+          open: req.body.ohFridayOpen,
+          close: req.body.ohFridayClose,
+        },
+        saturday: {
+          open: req.body.ohSaturdayOpen,
+          close: req.body.ohSaturdayClose,
+        },
+      },
+      menu: req.body.menu,
+      website: req.body.website,
+    };
 
-    // clean body from sensitive values
-    delete body._id;
-    delete body.active;
-    delete body.ownerId;
-    delete body.ratingsAverage;
-    delete body.createdAt;
-    delete body.usersReviewed;
-    delete body.ratingsQuantity;
-    delete body.slug;
+    // Validate body
+    await validateRest(body);
 
     // getting user id from protect MW
     const userId = req.user._id;
@@ -298,7 +333,43 @@ exports.updateRestById = async (req, res) => {
     // everything is OK, send response
     res.status(200).send(updatedRest);
   } catch (err) {
-    res.status(400).send(err.errors);
+    res.status(400).send(err);
+  }
+};
+
+/**************************************************
+ ****** UPDATE RESTAURANT ** PHOTOS ** BY ID ******
+ **************************************************/
+exports.updateRestPhotosById = async (req, res) => {
+  try {
+    if (!req.files.gallery || !req.files.logo) res.status(400).send('נא להעלות לוגו ותמונות');
+
+    // create gallery paths array
+    let galleryPaths = req.files.gallery.map((gal) => gal.path);
+
+    // getting user id from protect MW
+    const userId = req.user._id;
+
+    // trying to update rest with given rest & user IDs
+    const rest = await Rest.findOne({ _id: req.params.id, ownerId: userId });
+
+    // if failed:
+    // 1. not the same owner
+    // 2. rest does not exist
+    if (!rest) return res.status(404).send('המסעדה לא נמצאה');
+
+    // update the photos paths to the current photos uploaded
+    rest.logo = req.files.logo[0].path;
+    rest.gallery = galleryPaths;
+
+    await rest.save();
+
+    const updatedRest = await Rest.findById(req.params.id);
+
+    // everything is OK, send response
+    res.status(200).send(updatedRest);
+  } catch (err) {
+    res.status(400).send(err);
   }
 };
 

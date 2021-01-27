@@ -4,6 +4,7 @@ const {
   getRestById,
   createRest,
   updateRestById,
+  updateRestPhotosById,
   deleteRestById,
 } = require('../controllers/restController');
 const { protectMW } = require('../controllers/authController');
@@ -16,14 +17,10 @@ const date = Date.now();
 
 const storage = multer.diskStorage({
   destination: function (req, file, callback) {
-    // callback(null, `./uploads/${req.body.name}`);
     callback(null, `./uploads/`);
   },
   filename: function (req, file, callback) {
-    callback(
-      null,
-      `${req.body.name}-${file.fieldname}-${date}-${path.basename(file.originalname)}`,
-    );
+    callback(null, `${file.fieldname}-${date}-${path.basename(file.originalname)}`);
   },
 });
 
@@ -78,6 +75,17 @@ router
     ]),
 
     updateRestById,
+  )
+  // update photos only
+  .patch(
+    protectMW,
+
+    upload.fields([
+      { name: 'logo', maxCount: 1 },
+      { name: 'gallery', maxCount: 10 },
+    ]),
+
+    updateRestPhotosById,
   )
   .delete(protectMW, deleteRestById);
 
