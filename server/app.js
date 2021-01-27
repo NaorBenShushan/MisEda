@@ -34,8 +34,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Routers
+app.use('/', userRoutes);
 app.use('/restaurants', restRoutes);
-app.use('/users', userRoutes);
 app.use('/reviews', reviewRoutes);
 
 // Starting the server

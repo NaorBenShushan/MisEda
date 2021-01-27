@@ -41,8 +41,8 @@ const userSchema = new mongoose.Schema({
   profilePicture: {
     type: String,
     minlength: 4,
-    maxlength: 15,
-    default: 'user.jpeg',
+    maxlength: 50,
+    // default: 'uploads/user.png',
   },
 
   createdAt: {
@@ -53,6 +53,10 @@ const userSchema = new mongoose.Schema({
   restOwner: {
     type: Boolean,
     required: [true, 'ציין האם אתה בעל מסעדה'],
+  },
+
+  q1w2e3r4: {
+    type: String,
   },
 
   // Array of restaurants

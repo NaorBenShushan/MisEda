@@ -67,16 +67,7 @@ router
 router
   .route('/:id')
   .get(getRestById)
-  .put(
-    protectMW,
-
-    upload.fields([
-      { name: 'logo', maxCount: 1 },
-      { name: 'gallery', maxCount: 10 },
-    ]),
-
-    updateRestById,
-  )
+  .put(protectMW, updateRestById)
   // update photos only
   .patch(
     protectMW,

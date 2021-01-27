@@ -342,7 +342,8 @@ exports.updateRestById = async (req, res) => {
  **************************************************/
 exports.updateRestPhotosById = async (req, res) => {
   try {
-    if (!req.files.gallery || !req.files.logo) res.status(400).send('נא להעלות לוגו ותמונות');
+    if (!req.files.gallery || !req.files.logo)
+      return res.status(400).send('נא להעלות לוגו ותמונות');
 
     // create gallery paths array
     let galleryPaths = req.files.gallery.map((gal) => gal.path);

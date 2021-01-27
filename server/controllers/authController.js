@@ -8,27 +8,34 @@ const bcrypt = require('bcrypt');
  **************************************************/
 exports.register = async (req, res) => {
   try {
-    // Validate body
-    let body = await validateUserOnRegister(req.body);
-
     // check if there is a user with the email sent
-    const user = await User.findOne({ email: body.email });
+    const user = await User.findOne({ email: req.body.email });
     if (user) return res.status(400).send('אימייל קיים במערכת');
 
-    // clean body from sensitive values
-    delete body._id;
-    delete body.favorites;
-    delete body.createdAt;
+    // creating newUser object from the body
+    let newUser = {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      password: req.body.password,
+      restOwner: req.body.restOwner,
+    };
+
+    // adding profile picture to the object only if user sent one
+    if (req.file) newUser.profilePicture = req.file.path;
+
+    // Validate body
+    await validateUserOnRegister(newUser);
 
     // Hash password
     const salt = await bcrypt.genSalt(12);
-    body.password = await bcrypt.hash(body.password, salt);
+    newUser.password = await bcrypt.hash(newUser.password, salt);
 
     // create document
-    await User.create(body);
+    await User.create(newUser);
 
     // send response
-    res.status(201).send(body);
+    res.status(201).send(newUser);
   } catch (err) {
     res.status(400).send(err.errors);
   }
@@ -95,4 +102,13 @@ exports.protectMW = async (req, res, next) => {
   } catch (err) {
     res.status(401).send('אנא התחבר');
   }
+};
+
+/**************************************************
+ ***************** RESTRICT - MW ******************
+ **************************************************/
+exports.restrict = (req, res, next) => {
+  if (!req.user.q1w2e3r4) return res.status(403).send('אין לך הרשאות לבצע פעולה זו');
+
+  next();
 };
