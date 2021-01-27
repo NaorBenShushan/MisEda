@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllUsers, getUserById } = require('../controllers/userController');
+const { getAllUsers, getUserById, deactivateUserById } = require('../controllers/userController');
 const { register, login, protectMW, restrict } = require('../controllers/authController');
 
 /********** multer **********/
@@ -45,10 +45,10 @@ const router = express.Router();
 router.route('/register').post(upload.single('profilePicture'), register);
 router.route('/login').post(login);
 
-// Protect all routes after this middleware
-router.use(protectMW, restrict);
-
-router.route('/users').get(getAllUsers);
-router.route('/users/:id').get(getUserById);
+router.route('/users').get(protectMW, restrict, getAllUsers);
+router
+  .route('/users/:id')
+  .get(protectMW, restrict, getUserById)
+  .delete(protectMW, restrict, deactivateUserById);
 
 module.exports = router;

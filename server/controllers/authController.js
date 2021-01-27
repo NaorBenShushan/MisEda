@@ -60,10 +60,13 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ email: email }).select('+password');
 
     if (!user || !(await user.correctPassword(password, user.password))) {
-      res.status(400).send('אימייל או סיסמא לא נכונים');
+      return res.status(400).send('אימייל או סיסמא לא נכונים');
     }
 
-    // 3) if everything is ok, send token to client
+    // 3) Check if user is deactivated
+    if (user.active === false) return res.status(400).send('חשבונך מושעה');
+
+    // 4) if everything is ok, send token to client
     res.json({
       token: user.generateAuthToken(),
       // favorites: user.getFavorites()
@@ -95,7 +98,10 @@ exports.protectMW = async (req, res, next) => {
 
     if (!currentUser) return res.status(401).send('אנא התחבר שנית');
 
-    // 4) GRANT ACCESS TO PROTECTED ROUTE
+    // 4) Check if user is deactivated
+    if (currentUser.active === false) return res.status(401).send('חשבונך מושעה');
+
+    // 5) GRANT ACCESS TO PROTECTED ROUTE
     req.user = currentUser;
 
     next();

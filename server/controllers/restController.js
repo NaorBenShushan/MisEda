@@ -166,7 +166,13 @@ async function validateRest(rest) {
  *************** GET ALL RESTAURANTS **************
  **************************************************/
 exports.getAllRests = async (req, res) => {
-  const rests = await Rest.find();
+  let rests;
+
+  if (req.query) {
+    rests = await Rest.find().sort('-ratingsAverage').limit(5);
+  } else {
+    rests = await Rest.find();
+  }
 
   if (!rests || rests.length === 0) return res.status(404).send('לא נמצאו מסעדות');
 
@@ -377,12 +383,12 @@ exports.updateRestPhotosById = async (req, res) => {
 /**************************************************
  ************* DELETE RESTAURANT BY ID ************
  **************************************************/
-exports.deleteRestById = async (req, res) => {
+exports.deactivateRestById = async (req, res) => {
   try {
     // getting user id from protect MW
     const user = req.user._id;
 
-    // trying to update 'active' field rest with given rest & user IDs
+    // trying to update 'active' field with given rest & user IDs
     const rest = await Rest.findOneAndUpdate(
       { _id: req.params.id, ownerId: user },
       { active: false },
@@ -433,5 +439,11 @@ exports.reactivateRestById = async (req, res) => {
 };
 
 /**************************************************
- ************** GET TOP 5 RESTAURANTS *************
+ *********** GET TOP 5 RESTAURANTS - MW ***********
  **************************************************/
+exports.topFiveRests = (req, res, next) => {
+  req.query.limit = '5';
+  req.query.sort = 'ratingsAverage';
+
+  next();
+};

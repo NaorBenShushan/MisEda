@@ -8,8 +8,6 @@ const { protectMW } = require('../controllers/authController');
 
 const router = express.Router();
 
-// router.route('/').get();
-
 router
   .route('/:id')
   .get(getReviewsByRestId)

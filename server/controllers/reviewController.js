@@ -61,6 +61,9 @@ exports.createReviewByRestId = async (req, res) => {
     delete newReview.restId;
     delete newReview.createdAt;
 
+    // restrict to **NOT** rest owners only
+    if (req.user.restOwner) return res.status(401).send('אין לך הרשאות לבצע פעולה זו');
+
     // checking if rest id is valid
     if (!ObjectId.isValid(req.params.id)) {
       return res.status(404).send('אין מסעדה כזו');
@@ -79,9 +82,6 @@ exports.createReviewByRestId = async (req, res) => {
     // if user didn't review this rest yet, add his ID to the array
     rest.usersReviewed.push(req.user._id);
     await rest.save();
-
-    // restrict to **NOT** rest owners only
-    if (req.user.restOwner) return res.status(401).send('אין לך הרשאות לבצע פעולה זו');
 
     // getting user + rest from protect MW and adding it to the review object
     newReview.userId = req.user._id;
@@ -115,6 +115,9 @@ exports.updateReviewByRestId = async (req, res) => {
     delete sentReview.restId;
     delete sentReview.createdAt;
 
+    // restrict to **NOT** rest owners only
+    if (req.user.restOwner) return res.status(401).send('אין לך הרשאות לבצע פעולה זו');
+
     // checking if rest id is valid
     if (!ObjectId.isValid(req.params.id)) {
       return res.status(404).send('אין מסעדה כזו');
@@ -124,9 +127,6 @@ exports.updateReviewByRestId = async (req, res) => {
     const rest = await Rest.findOne({ _id: req.params.id, active: true });
 
     if (!rest) return res.status(404).send('המסעדה המבוקשת לא נמצאה');
-
-    // restrict to **NOT** rest owners only
-    if (req.user.restOwner) return res.status(401).send('אין לך הרשאות לבצע פעולה זו');
 
     // update review
     const reviewToUpdate = await Review.findOneAndUpdate(

@@ -5,8 +5,9 @@ const {
   createRest,
   updateRestById,
   updateRestPhotosById,
-  deleteRestById,
+  deactivateRestById,
   reactivateRestById,
+  topFiveRests,
 } = require('../controllers/restController');
 const { protectMW } = require('../controllers/authController');
 
@@ -50,6 +51,9 @@ const upload = multer({
 /********** router **********/
 const router = express.Router();
 
+// top 5 rests
+router.route('/top-5-rests').get(topFiveRests, getAllRests);
+
 router
   .route('/')
   .get(getAllRests)
@@ -79,7 +83,7 @@ router
 
     updateRestPhotosById,
   )
-  .delete(protectMW, deleteRestById);
+  .delete(protectMW, deactivateRestById);
 
 // restore Restaurant
 router.route('/reactivate/:id').put(protectMW, reactivateRestById);

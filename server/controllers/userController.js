@@ -96,5 +96,19 @@ exports.getUserById = async (req, res) => {
  **************************************************/
 
 /**************************************************
- **************** DELETE USER BY ID ***************
+ ************** DEACTIVATE USER BY ID *************
  **************************************************/
+exports.deactivateUserById = async (req, res) => {
+  // getting user id from req.params
+  const userId = req.params.id;
+
+  // trying to update 'active' field with given user ID
+  const user = await User.findOneAndUpdate({ _id: userId, active: false });
+
+  // if this rest is already deleted => send error
+  if (user.active === false) return res.status(400).send('המשתמש נמחק כבר');
+
+  if (!user) return res.status(404).send('המשתמש לא נמצא');
+
+  res.status(200).send(user);
+};

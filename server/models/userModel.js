@@ -55,6 +55,11 @@ const userSchema = new mongoose.Schema({
     required: [true, 'ציין האם אתה בעל מסעדה'],
   },
 
+  active: {
+    type: Boolean,
+    default: true,
+  },
+
   q1w2e3r4: {
     type: String,
   },
