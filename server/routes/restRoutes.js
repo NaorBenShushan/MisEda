@@ -6,10 +6,11 @@ const {
   updateRestById,
   updateRestPhotosById,
   deleteRestById,
+  reactivateRestById,
 } = require('../controllers/restController');
 const { protectMW } = require('../controllers/authController');
 
-// multer
+/********** multer **********/
 const multer = require('multer');
 var path = require('path');
 
@@ -46,7 +47,7 @@ const upload = multer({
   fileFilter,
 });
 
-// router
+/********** router **********/
 const router = express.Router();
 
 router
@@ -88,6 +89,9 @@ router
     updateRestPhotosById,
   )
   .delete(protectMW, deleteRestById);
+
+// restore Restaurant
+router.route('/reactivate/:id').put(protectMW, reactivateRestById);
 
 //   router
 //   .route('/:slug')

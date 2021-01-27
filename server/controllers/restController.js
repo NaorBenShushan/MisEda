@@ -387,6 +387,9 @@ exports.deleteRestById = async (req, res) => {
       { active: false },
     );
 
+    // if this rest is already deleted => send error
+    if (rest.active === false) return res.status(400).send('המסעדה נמחקה כבר');
+
     // if failed:
     // 1. not the same owner
     // 2. rest does not exist
@@ -394,6 +397,35 @@ exports.deleteRestById = async (req, res) => {
 
     // everything is OK, send response
     res.status(200).send('המסעדה נמחקה בהצלחה');
+  } catch (err) {
+    res.status(400).send(err);
+  }
+};
+
+/**************************************************
+ *********** REACTIVATE RESTAURANT BY ID **********
+ **************************************************/
+exports.reactivateRestById = async (req, res) => {
+  try {
+    // getting user id from protect MW
+    const user = req.user._id;
+
+    // trying to update 'active' field rest with given rest & user IDs
+    const rest = await Rest.findOneAndUpdate(
+      { _id: req.params.id, ownerId: user },
+      { active: true },
+    );
+
+    // if this rest is already deleted => send error
+    if (rest.active === true) return res.status(400).send('המסעדה אוקטבה כבר');
+
+    // if failed:
+    // 1. not the same owner
+    // 2. rest does not exist
+    if (!rest) return res.status(404).send('!!!המסעדה לא נמצאה');
+
+    // everything is OK, send response
+    res.status(200).send('המסעדה אוקטבה בהצלחה');
   } catch (err) {
     res.status(400).send(err);
   }
