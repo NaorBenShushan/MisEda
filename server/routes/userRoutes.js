@@ -1,5 +1,11 @@
 const express = require('express');
-const { getAllUsers, getUserById, deactivateUserById } = require('../controllers/userController');
+const {
+  updateUserById,
+  getAllUsers,
+  getUserById,
+  deactivateUserById,
+  reactivateUserById,
+} = require('../controllers/userController');
 const { register, login, protectMW, restrict } = require('../controllers/authController');
 
 /********** multer **********/
@@ -42,6 +48,7 @@ const upload = multer({
 /********** router **********/
 const router = express.Router();
 
+router.route('/my-account').patch(protectMW, updateUserById);
 router.route('/register').post(upload.single('profilePicture'), register);
 router.route('/login').post(login);
 
@@ -49,6 +56,7 @@ router.route('/users').get(protectMW, restrict, getAllUsers);
 router
   .route('/users/:id')
   .get(protectMW, restrict, getUserById)
+  .put(protectMW, restrict, reactivateUserById)
   .delete(protectMW, restrict, deactivateUserById);
 
 module.exports = router;
