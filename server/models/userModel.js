@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
     required: [true, 'ציין אימייל'],
     trim: true,
     minlength: [6, 'אימייל לא תקין'],
-    maxlength: [20, 'אימייל לא תקין'],
+    maxlength: [25, 'אימייל לא תקין'],
     lowercase: true,
     unique: [true, 'אימייל קיים במערכת'],
   },

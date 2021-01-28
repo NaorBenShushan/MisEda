@@ -63,7 +63,7 @@ exports.validateUserOnLogin = async (user) => {
   return userSchema.validate(user, { abortEarly: false });
 };
 
-exports.validateUserOnUpdate = async (user) => {
+const validateUserOnUpdate = async (user) => {
   let userSchema = yup.object().shape({
     firstName: yup
       .string()
@@ -84,7 +84,7 @@ exports.validateUserOnUpdate = async (user) => {
       .required('יש לציין אימייל')
       .trim()
       .min(6, 'האימייל קצר מדי')
-      .max(20, 'האימייל ארוך מדי')
+      .max(25, 'האימייל ארוך מדי')
       .email()
       .lowercase(),
   });
@@ -101,27 +101,42 @@ exports.validateUserOnUpdate = async (user) => {
  **************************************************/
 exports.updateUserById = async (req, res) => {
   try {
+    // getting user ID from protect MW
     const userId = req.user._id;
+
+    // creating body object
+    let body = req.body;
+
+    // check if there is another user with this email
+    const emailCheck = await User.findOne({ email: body.email });
+
+    console.log(userId);
+
+    if (emailCheck) {
+      console.log(emailCheck._id);
+
+      if (emailCheck._id !== userId) {
+        return res.status(400).send('כבר קיים משתמש עם האימייל הזה במערכת');
+      }
+    }
+
+    // checking if the user still exists
     const user = await User.findOne({ _id: userId });
     if (!user) return res.status(400).send('משהו השתבש. אנא התחבר מחדש.');
 
-    // creating userToUpdate object from the body
-    let userToUpdate = req.body;
-
-    console.log(userToUpdate);
-    // adding profile picture to the object only if user sent one
-    // if (req.file) userToUpdate.profilePicture = req.file.path;
-
     // Validate body
-    await validateUserOnUpdate(userToUpdate);
+    await validateUserOnUpdate(body);
 
-    // create document
-    await User.findOneAndUpdate(userToUpdate);
+    // update document
+    await User.findOneAndUpdate({ _id: userId }, body);
 
-    // send response
-    res.status(201).send(userToUpdate);
+    // getting the updated user
+    const updatedUser = await User.findOne({ _id: userId });
+
+    // sending updated user to the client
+    res.status(200).send(updatedUser);
   } catch (err) {
-    res.status(400).send(err.errors);
+    res.status(400).send(err);
   }
 };
 
@@ -158,7 +173,7 @@ exports.updateUserPhotosById = async (req, res) => {
 /* &&&&&&&&&&&&&&&&&&& ADMIN FUNCTION  &&&&&&&&&&&&&&&&&&& */
 
 /**************************************************
- ****************** GET ALL USERS *****************
+ ***************** GET ALL USERS ******************
  **************************************************/
 exports.getAllUsers = async (req, res) => {
   const users = await User.find();

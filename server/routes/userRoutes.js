@@ -51,7 +51,8 @@ const router = express.Router();
 
 router
   .route('/my-account')
-  .put(protectMW, updateUserById) // update photos only
+  .put(protectMW, updateUserById)
+  // update photos only
   .patch(protectMW, upload.single('profilePicture'), updateUserPhotosById);
 
 router.route('/register').post(upload.single('profilePicture'), register);
