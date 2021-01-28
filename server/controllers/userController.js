@@ -1,38 +1,38 @@
-const User = require('../models/userModel');
-const yup = require('yup');
+const User = require("../models/userModel");
+const yup = require("yup");
 
 exports.validateUserOnRegister = async (user) => {
   let userSchema = yup.object().shape({
     firstName: yup
       .string()
-      .required('יש לציין שם פרטי')
+      .required("יש לציין שם פרטי")
       .trim()
-      .min(2, 'שם פרטי קצר מדי')
-      .max(15, 'שם פרטי ארוך מדי'),
+      .min(2, "שם פרטי קצר מדי")
+      .max(15, "שם פרטי ארוך מדי"),
 
     lastName: yup
       .string()
-      .required('יש לציין שם משפחה')
+      .required("יש לציין שם משפחה")
       .trim()
-      .min(2, 'שם המשפחה קצר מדי')
-      .max(15, 'שם המשפחה ארוך מדי'),
+      .min(2, "שם המשפחה קצר מדי")
+      .max(15, "שם המשפחה ארוך מדי"),
 
     email: yup
       .string()
-      .required('יש לציין אימייל')
+      .required("יש לציין אימייל")
       .trim()
-      .min(6, 'האימייל קצר מדי')
-      .max(20, 'האימייל ארוך מדי')
+      .min(6, "האימייל קצר מדי")
+      .max(20, "האימייל ארוך מדי")
       .email()
       .lowercase(),
 
     password: yup
       .string()
-      .required('יש לציין סיסמה')
-      .min(8, 'הסיסמה קצרה מדי')
-      .max(20, 'הסיסמה ארוכה מדי'),
+      .required("יש לציין סיסמה")
+      .min(8, "הסיסמה קצרה מדי")
+      .max(20, "הסיסמה ארוכה מדי"),
 
-    restOwner: yup.boolean().required('יש לציין האם את/ה בעל/ת מסעדה'),
+    restOwner: yup.boolean().required("יש לציין האם את/ה בעל/ת מסעדה"),
   });
 
   // check validity
@@ -44,18 +44,18 @@ exports.validateUserOnLogin = async (user) => {
   let userSchema = yup.object().shape({
     email: yup
       .string()
-      .required('יש לציין אימייל')
+      .required("יש לציין אימייל")
       .trim()
-      .min(6, 'האימייל קצר מדי')
-      .max(20, 'האימייל ארוך מדי')
+      .min(6, "האימייל קצר מדי")
+      .max(20, "האימייל ארוך מדי")
       .email()
       .lowercase(),
 
     password: yup
       .string()
-      .required('יש לציין סיסמה')
-      .min(8, 'הסיסמה קצרה מדי')
-      .max(20, 'הסיסמה ארוכה מדי'),
+      .required("יש לציין סיסמה")
+      .min(8, "הסיסמה קצרה מדי")
+      .max(20, "הסיסמה ארוכה מדי"),
   });
 
   // check validity
@@ -67,24 +67,24 @@ exports.validateUserOnUpdate = async (user) => {
   let userSchema = yup.object().shape({
     firstName: yup
       .string()
-      .required('יש לציין שם פרטי')
+      .required("יש לציין שם פרטי")
       .trim()
-      .min(2, 'שם פרטי קצר מדי')
-      .max(15, 'שם פרטי ארוך מדי'),
+      .min(2, "שם פרטי קצר מדי")
+      .max(15, "שם פרטי ארוך מדי"),
 
     lastName: yup
       .string()
-      .required('יש לציין שם משפחה')
+      .required("יש לציין שם משפחה")
       .trim()
-      .min(2, 'שם המשפחה קצר מדי')
-      .max(15, 'שם המשפחה ארוך מדי'),
+      .min(2, "שם המשפחה קצר מדי")
+      .max(15, "שם המשפחה ארוך מדי"),
 
     email: yup
       .string()
-      .required('יש לציין אימייל')
+      .required("יש לציין אימייל")
       .trim()
-      .min(6, 'האימייל קצר מדי')
-      .max(20, 'האימייל ארוך מדי')
+      .min(6, "האימייל קצר מדי")
+      .max(20, "האימייל ארוך מדי")
       .email()
       .lowercase(),
   });
@@ -103,7 +103,7 @@ exports.updateUserById = async (req, res) => {
   try {
     const userId = req.user._id;
     const user = await User.findOne({ _id: userId });
-    if (!user) return res.status(400).send('משהו השתבש. אנא התחבר מחדש.');
+    if (!user) return res.status(400).send("משהו השתבש. אנא התחבר מחדש.");
 
     // creating userToUpdate object from the body
     let userToUpdate = req.body;
@@ -128,7 +128,38 @@ exports.updateUserById = async (req, res) => {
 /**************************************************
  ********** UPDATE USER ** PHOTOS ** BY ID ********
  **************************************************/
-exports.updateUserPhotosById = async (req, res) => {};
+exports.updateUserPhotosById = async (req, res) => {
+  try {
+    if (!req.files.gallery)
+      return res.status(400).send("נא להעלות תמונות לעדכון");
+
+    // create gallery paths array
+    let galleryPaths = req.files.gallery.map((gal) => gal.path);
+
+    // getting user id from protect MW
+    const userId = req.user._id;
+
+    // trying to update rest with given rest & user IDs
+    const user = await User.findOne({ _id: req.params.id, ownerId: userId });
+
+    // if failed:
+    // 1. not the same owner
+    // 2. rest does not exist
+    if (!user) return res.status(404).send("המסעדה לא נמצאה");
+
+    // update the photos paths to the current photos uploaded
+    rest.gallery = galleryPaths;
+
+    await user.save();
+
+    const updatedRest = await User.findById(req.params.id);
+
+    // everything is OK, send response
+    res.status(200).send(updatedRest);
+  } catch (err) {
+    res.status(400).send(err);
+  }
+};
 
 /* &&&&&&&&&&&&&&&&&&& ADMIN FUNCTION  &&&&&&&&&&&&&&&&&&& */
 
@@ -138,7 +169,8 @@ exports.updateUserPhotosById = async (req, res) => {};
 exports.getAllUsers = async (req, res) => {
   const users = await User.find();
 
-  if (!users || users.length === 0) return res.status(404).send('לא נמצאו משתמשים');
+  if (!users || users.length === 0)
+    return res.status(404).send("לא נמצאו משתמשים");
 
   res.status(200).json({
     results: users.length,
@@ -153,7 +185,7 @@ exports.getUserById = async (req, res) => {
   const userId = req.params.id;
   const user = await User.findOne({ _id: userId });
 
-  if (!user) return res.status(404).send('המשתמש לא נמצא');
+  if (!user) return res.status(404).send("המשתמש לא נמצא");
 
   res.status(200).send(user);
 };
@@ -169,9 +201,9 @@ exports.deactivateUserById = async (req, res) => {
   const user = await User.findOneAndUpdate({ _id: userId }, { active: false });
 
   // if this rest is already deleted => send error
-  if (user.active === false) return res.status(400).send('המשתמש נמחק כבר');
+  if (user.active === false) return res.status(400).send("המשתמש נמחק כבר");
 
-  if (!user) return res.status(404).send('המשתמש לא נמצא');
+  if (!user) return res.status(404).send("המשתמש לא נמצא");
 
   res.status(200).send(user);
 };
@@ -187,9 +219,9 @@ exports.reactivateUserById = async (req, res) => {
   const user = await User.findOneAndUpdate({ _id: userId }, { active: true });
 
   // if this rest is already deleted => send error
-  if (user.active === true) return res.status(400).send('המשתמש אוקטב כבר');
+  if (user.active === true) return res.status(400).send("המשתמש אוקטב כבר");
 
-  if (!user) return res.status(404).send('המשתמש לא נמצא');
+  if (!user) return res.status(404).send("המשתמש לא נמצא");
 
   res.status(200).send(user);
 };
