@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require('express');
 const {
   updateUserById,
   getAllUsers,
@@ -6,17 +6,12 @@ const {
   deactivateUserById,
   reactivateUserById,
   updateUserPhotosById,
-} = require("../controllers/userController");
-const {
-  register,
-  login,
-  protectMW,
-  restrict,
-} = require("../controllers/authController");
+} = require('../controllers/userController');
+const { register, login, protectMW, restrict } = require('../controllers/authController');
 
 /********** multer **********/
-const multer = require("multer");
-var path = require("path");
+const multer = require('multer');
+var path = require('path');
 
 const date = Date.now();
 
@@ -25,20 +20,17 @@ const storage = multer.diskStorage({
     callback(null, `./uploads/`);
   },
   filename: function (req, file, callback) {
-    callback(
-      null,
-      `${file.fieldname}-${date}-${path.basename(file.originalname)}`
-    );
+    callback(null, `${file.fieldname}-${date}-${path.basename(file.originalname)}`);
   },
 });
 
 const fileFilter = (req, file, cb) => {
   if (
-    file.mimetype === "image/jpeg" ||
-    file.mimetype === "image/jpg" ||
-    file.mimetype === "image/jpe" ||
-    file.mimetype === "image/png" ||
-    file.mimetype === "image/jfif"
+    file.mimetype === 'image/jpeg' ||
+    file.mimetype === 'image/jpg' ||
+    file.mimetype === 'image/jpe' ||
+    file.mimetype === 'image/png' ||
+    file.mimetype === 'image/jfif'
   ) {
     cb(null, true);
   } else {
@@ -58,24 +50,16 @@ const upload = multer({
 const router = express.Router();
 
 router
-  .route("/my-account")
+  .route('/my-account')
   .put(protectMW, updateUserById) // update photos only
-  .patch(
-    protectMW,
+  .patch(protectMW, upload.single('profilePicture'), updateUserPhotosById);
 
-    upload.fields([
-      { name: "logo", maxCount: 1 },
-      { name: "gallery", maxCount: 10 },
-    ]),
+router.route('/register').post(upload.single('profilePicture'), register);
+router.route('/login').post(login);
 
-    updateUserPhotosById
-  );
-router.route("/register").post(upload.single("profilePicture"), register);
-router.route("/login").post(login);
-
-router.route("/users").get(protectMW, restrict, getAllUsers);
+router.route('/users').get(protectMW, restrict, getAllUsers);
 router
-  .route("/users/:id")
+  .route('/users/:id')
   .get(protectMW, restrict, getUserById)
   .put(protectMW, restrict, reactivateUserById)
   .delete(protectMW, restrict, deactivateUserById);
