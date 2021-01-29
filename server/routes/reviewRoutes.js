@@ -3,6 +3,7 @@ const {
   getReviewsByRestId,
   createReviewByRestId,
   updateReviewByRestId,
+  deleteReviewByRestId,
 } = require('../controllers/reviewController');
 const { protectMW } = require('../controllers/authController');
 
@@ -13,6 +14,6 @@ router
   .get(getReviewsByRestId)
   .post(protectMW, createReviewByRestId)
   .put(protectMW, updateReviewByRestId)
-  .delete();
+  .delete(protectMW, deleteReviewByRestId);
 
 module.exports = router;

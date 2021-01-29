@@ -1,4 +1,5 @@
 const User = require('../models/userModel');
+const Review = require('../models/reviewModel');
 const yup = require('yup');
 
 exports.validateUserOnRegister = async (user) => {
@@ -163,6 +164,30 @@ exports.updateUserPhotosById = async (req, res) => {
 
     // sending updated user to the client
     res.status(200).send(updatedUser);
+  } catch (err) {
+    res.status(400).send(err);
+  }
+};
+
+/**************************************************
+ *********** GET ALL REVIEWS BY USER ID ***********
+ **************************************************/
+exports.getReviewsByUserId = async (req, res) => {
+  try {
+    // restrict to **NOT** rest owners only
+    if (req.user.restOwner) return res.status(401).send('אין לך הרשאות לבצע פעולה זו');
+
+    const reviews = await Review.find({ userId: req.user._id }).populate('restId', 'active');
+
+    if (!reviews || reviews.length === 0) return res.status(404).send('עדיין לא פרסמת ביקורות');
+
+    // check if rest exists
+    let reviewsToSend = reviews.filter((review) => review.restId.active === true);
+
+    res.status(200).json({
+      results: reviewsToSend.length,
+      data: reviewsToSend,
+    });
   } catch (err) {
     res.status(400).send(err);
   }

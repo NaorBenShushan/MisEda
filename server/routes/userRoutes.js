@@ -1,11 +1,12 @@
 const express = require('express');
 const {
   updateUserById,
+  updateUserPhotosById,
+  getReviewsByUserId,
   getAllUsers,
   getUserById,
   deactivateUserById,
   reactivateUserById,
-  updateUserPhotosById,
 } = require('../controllers/userController');
 const { register, login, protectMW, restrict } = require('../controllers/authController');
 
@@ -49,15 +50,22 @@ const upload = multer({
 /********** router **********/
 const router = express.Router();
 
+// USER ROUTES
 router
   .route('/my-account')
+  // .get(protectMW, getMe)
   .put(protectMW, updateUserById)
   // update photos only
   .patch(protectMW, upload.single('profilePicture'), updateUserPhotosById);
 
+// USER REVIEWS ROUTES
+router.route('/my-reviews').get(protectMW, getReviewsByUserId);
+
+// AUTH ROUTES
 router.route('/register').post(upload.single('profilePicture'), register);
 router.route('/login').post(login);
 
+// ADMIN ROUTES
 router.route('/users').get(protectMW, restrict, getAllUsers);
 router
   .route('/users/:id')

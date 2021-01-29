@@ -102,7 +102,7 @@ exports.createReviewByRestId = async (req, res) => {
  **************************************************/
 
 /**************************************************
- *************** UPDATE REVIEW BY ID **************
+ ************* UPDATE REVIEW BY REST ID ***********
  **************************************************/
 exports.updateReviewByRestId = async (req, res) => {
   try {
@@ -149,5 +149,39 @@ exports.updateReviewByRestId = async (req, res) => {
 };
 
 /**************************************************
- *************** DELETE REVIEW BY ID **************
+ ************* DELETE REVIEW BY REST ID ***********
  **************************************************/
+exports.deleteReviewByRestId = async (req, res) => {
+  try {
+    // restrict to **NOT** rest owners only
+    if (req.user.restOwner) return res.status(401).send('אין לך הרשאות לבצע פעולה זו');
+
+    // checking if rest id is valid
+    if (!ObjectId.isValid(req.params.id)) {
+      return res.status(404).send('אין מסעדה כזו');
+    }
+
+    // check if rest exists
+    const rest = await Rest.findOne({ _id: req.params.id, active: true });
+
+    if (!rest) return res.status(404).send('המסעדה המבוקשת לא נמצאה');
+
+    // update review
+    const reviewToDelete = await Review.findOneAndDelete({
+      restId: req.params.id,
+      userId: req.user._id,
+    });
+
+    console.log(reviewToDelete);
+
+    if (!reviewToDelete) return res.status(404).send('הביקורת לא נמצאה');
+
+    // pull user from usersReviewed array in rest model
+    await Rest.updateOne({ _id: req.params.id }, { $pull: { usersReviewed: req.user._id } });
+
+    // send response
+    res.status(202).send('הביקורת נמחקה בהצלחה');
+  } catch (err) {
+    res.status(400).send(err);
+  }
+};
