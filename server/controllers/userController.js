@@ -110,12 +110,10 @@ exports.updateUserById = async (req, res) => {
     // check if there is another user with this email
     const emailCheck = await User.findOne({ email: body.email });
 
-    console.log(userId);
-
     if (emailCheck) {
-      console.log(emailCheck._id);
-
-      if (emailCheck._id !== userId) {
+      // WE USE STRINGIFY HERE BECAUSE THE TYPE OF THESE VARS
+      // WAS 'OBJECT' INSTEAD OF 'STRING'
+      if (JSON.stringify(emailCheck._id) !== JSON.stringify(userId)) {
         return res.status(400).send('כבר קיים משתמש עם האימייל הזה במערכת');
       }
     }
