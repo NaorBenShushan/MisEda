@@ -15,14 +15,14 @@ const { protectMW } = require('../controllers/authController');
 const multer = require('multer');
 var path = require('path');
 
-const date = Date.now();
+// const date = Date.now();
 
 const storage = multer.diskStorage({
   destination: function (req, file, callback) {
     callback(null, `./uploads/`);
   },
   filename: function (req, file, callback) {
-    callback(null, `${file.fieldname}-${date}-${path.basename(file.originalname)}`);
+    callback(null, `${file.fieldname}-${Date.now()}-${path.basename(file.originalname)}`);
   },
 });
 

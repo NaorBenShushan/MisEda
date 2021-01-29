@@ -1,5 +1,7 @@
 const Rest = require('../models/restModel');
 const yup = require('yup');
+const fs = require('fs');
+const path = require('path');
 
 async function validateRest(rest) {
   let restSchema = yup.object().shape({
@@ -364,6 +366,29 @@ exports.updateRestPhotosById = async (req, res) => {
     // 1. not the same owner
     // 2. rest does not exist
     if (!rest) return res.status(404).send('המסעדה לא נמצאה');
+
+    // get rest's old photos path and delete it from './uploads/' folder
+    if (rest.logo && rest.gallery) {
+      let oldLogo = rest.logo;
+      let oldGallery = [...rest.gallery];
+
+      // delete with fs
+      fs.unlink(path.normalize(oldLogo), (err) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+      });
+
+      oldGallery.forEach((photo) => {
+        fs.unlink(path.normalize(photo), (err) => {
+          if (err) {
+            console.error(err);
+            return;
+          }
+        });
+      });
+    }
 
     // update the photos paths to the current photos uploaded
     rest.logo = req.files.logo[0].path;

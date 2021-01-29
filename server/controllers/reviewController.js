@@ -172,8 +172,6 @@ exports.deleteReviewByRestId = async (req, res) => {
       userId: req.user._id,
     });
 
-    console.log(reviewToDelete);
-
     if (!reviewToDelete) return res.status(404).send('הביקורת לא נמצאה');
 
     // pull user from usersReviewed array in rest model

@@ -12,18 +12,37 @@ const { register, login, protectMW, restrict } = require('../controllers/authCon
 
 /********** multer **********/
 const multer = require('multer');
-var path = require('path');
+let path = require('path');
+let fs = require('fs');
 
-const date = Date.now();
+// const date = Date.now();
 
 const storage = multer.diskStorage({
   destination: function (req, file, callback) {
     callback(null, `./uploads/`);
   },
   filename: function (req, file, callback) {
-    callback(null, `${file.fieldname}-${date}-${path.basename(file.originalname)}`);
+    callback(null, `${file.fieldname}-${Date.now()}-${path.basename(file.originalname)}`);
   },
 });
+
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     var newDestination = `uploads/${req.user._id}`;
+//     var stat = null;
+//     try {
+//       stat = fs.statSync(newDestination);
+//     } catch (err) {
+//       fs.mkdirSync(newDestination);
+//     }
+//     if (stat && !stat.isDirectory()) {
+//       throw new Error(
+//         'Directory cannot be created because an inode of a different type exists at "' + dest + '"',
+//       );
+//     }
+//     cb(null, `${file.fieldname}-${date}-${path.basename(file.originalname)}`);
+//   },
+// });
 
 const fileFilter = (req, file, cb) => {
   if (

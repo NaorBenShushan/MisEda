@@ -1,6 +1,8 @@
 const User = require('../models/userModel');
 const Review = require('../models/reviewModel');
 const yup = require('yup');
+const fs = require('fs');
+const path = require('path');
 
 exports.validateUserOnRegister = async (user) => {
   let userSchema = yup.object().shape({
@@ -155,6 +157,19 @@ exports.updateUserPhotosById = async (req, res) => {
 
     // if no user has been found, send error
     if (!user) return res.status(404).send('המשתמש לא נמצא');
+
+    // get user's old photo path and delete it from './uploads/' folder
+    if (user.profilePicture) {
+      let oldPhoto = user.profilePicture;
+
+      // delete with fs
+      fs.unlink(path.normalize(oldPhoto), (err) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+      });
+    }
 
     // update user with the new profile picture
     await User.findOneAndUpdate({ _id: userId }, { profilePicture: req.file.path });
