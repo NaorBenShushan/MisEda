@@ -4,6 +4,7 @@ const {
   createReviewByRestId,
   updateReviewByRestId,
   deleteReviewByRestId,
+  restrictToRegularUserMW,
 } = require('../controllers/reviewController');
 const { protectMW } = require('../controllers/authController');
 
@@ -12,8 +13,8 @@ const router = express.Router();
 router
   .route('/:id')
   .get(getReviewsByRestId)
-  .post(protectMW, createReviewByRestId)
-  .put(protectMW, updateReviewByRestId)
-  .delete(protectMW, deleteReviewByRestId);
+  .post(protectMW, restrictToRegularUserMW, createReviewByRestId)
+  .put(protectMW, restrictToRegularUserMW, updateReviewByRestId)
+  .delete(protectMW, restrictToRegularUserMW, deleteReviewByRestId);
 
 module.exports = router;

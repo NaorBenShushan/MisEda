@@ -61,9 +61,6 @@ exports.createReviewByRestId = async (req, res) => {
     delete newReview.restId;
     delete newReview.createdAt;
 
-    // restrict to **NOT** rest owners only
-    if (req.user.restOwner) return res.status(401).send('אין לך הרשאות לבצע פעולה זו');
-
     // checking if rest id is valid
     if (!ObjectId.isValid(req.params.id)) {
       return res.status(404).send('אין מסעדה כזו');
@@ -115,9 +112,6 @@ exports.updateReviewByRestId = async (req, res) => {
     delete sentReview.restId;
     delete sentReview.createdAt;
 
-    // restrict to **NOT** rest owners only
-    if (req.user.restOwner) return res.status(401).send('אין לך הרשאות לבצע פעולה זו');
-
     // checking if rest id is valid
     if (!ObjectId.isValid(req.params.id)) {
       return res.status(404).send('אין מסעדה כזו');
@@ -153,9 +147,6 @@ exports.updateReviewByRestId = async (req, res) => {
  **************************************************/
 exports.deleteReviewByRestId = async (req, res) => {
   try {
-    // restrict to **NOT** rest owners only
-    if (req.user.restOwner) return res.status(401).send('אין לך הרשאות לבצע פעולה זו');
-
     // checking if rest id is valid
     if (!ObjectId.isValid(req.params.id)) {
       return res.status(404).send('אין מסעדה כזו');
@@ -166,7 +157,7 @@ exports.deleteReviewByRestId = async (req, res) => {
 
     if (!rest) return res.status(404).send('המסעדה המבוקשת לא נמצאה');
 
-    // update review
+    // delete review
     const reviewToDelete = await Review.findOneAndDelete({
       restId: req.params.id,
       userId: req.user._id,
@@ -182,4 +173,13 @@ exports.deleteReviewByRestId = async (req, res) => {
   } catch (err) {
     res.status(400).send(err);
   }
+};
+
+/**************************************************
+ ********* RESTRICT TO REGULAR USER - MW **********
+ **************************************************/
+exports.restrictToRegularUserMW = (req, res, next) => {
+  if (req.user.restOwner) return res.status(403).send('בעלים של מסעדה לא רשאי לבצע פעולה זו.');
+
+  next();
 };
