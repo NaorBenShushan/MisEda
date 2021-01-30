@@ -100,15 +100,25 @@ const validateUserOnUpdate = async (user) => {
 /* &&&&&&&&&&&&&&&&&&& USERS FUNCTIONS  &&&&&&&&&&&&&&&&&&& */
 
 /**************************************************
- **************** UPDATE USER BY ID ***************
+ **************** UPDATE USER DATA ****************
  **************************************************/
-exports.updateUserById = async (req, res) => {
+exports.updateUserData = async (req, res) => {
   try {
     // getting user ID from protect MW
     const userId = req.user._id;
 
     // creating body object
     let body = req.body;
+
+    // clean body from sensitive data
+    delete body._id;
+    delete body.active;
+    delete body.favorites;
+    delete body.password;
+    delete body.restOwner;
+    delete body.profilePicture;
+    delete body.createdAt;
+    delete body.q1w2e3r4;
 
     // check if there is another user with this email
     const emailCheck = await User.findOne({ email: body.email });
@@ -128,7 +138,7 @@ exports.updateUserById = async (req, res) => {
     // Validate body
     await validateUserOnUpdate(body);
 
-    // update document
+    // update user data
     await User.findOneAndUpdate({ _id: userId }, body);
 
     // getting the updated user
@@ -142,12 +152,12 @@ exports.updateUserById = async (req, res) => {
 };
 
 /**************************************************
- ********** UPDATE USER ** PHOTOS ** BY ID ********
+ ************* UPDATE USER ** PHOTOS ** ***********
  **************************************************/
-exports.updateUserPhotosById = async (req, res) => {
+exports.updateUserPhotos = async (req, res) => {
   try {
     // if no file has been recieved, send error
-    if (!req.file.path) return res.status(400).send('נא להעלות תמונה לעדכון');
+    if (!req.file) return res.status(400).send('נא להעלות תמונה לעדכון');
 
     // getting user id from protect MW
     const userId = req.user._id;
@@ -162,13 +172,11 @@ exports.updateUserPhotosById = async (req, res) => {
     if (user.profilePicture) {
       let oldPhoto = user.profilePicture;
 
-      // delete with fs
-      fs.unlink(path.normalize(oldPhoto), (err) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-      });
+      if (oldPhoto !== 'uploads/default_user.png')
+        // delete with fs
+        fs.unlink(path.normalize(oldPhoto), (err) => {
+          if (err) return;
+        });
     }
 
     // update user with the new profile picture
@@ -187,7 +195,7 @@ exports.updateUserPhotosById = async (req, res) => {
 /**************************************************
  *********** GET ALL REVIEWS BY USER ID ***********
  **************************************************/
-exports.getReviewsByUserId = async (req, res) => {
+exports.getMyReviews = async (req, res) => {
   try {
     // restrict to **NOT** rest owners only
     if (req.user.restOwner) return res.status(401).send('אין לך הרשאות לבצע פעולה זו');
@@ -251,7 +259,7 @@ exports.deactivateUserById = async (req, res) => {
 
   if (!user) return res.status(404).send('המשתמש לא נמצא');
 
-  res.status(200).send(user);
+  res.status(200).send('המשתמש נמחק בהצלחה');
 };
 
 /**************************************************
@@ -269,5 +277,5 @@ exports.reactivateUserById = async (req, res) => {
 
   if (!user) return res.status(404).send('המשתמש לא נמצא');
 
-  res.status(200).send(user);
+  res.status(200).send('המשתמש אוקטב בהצלחה');
 };

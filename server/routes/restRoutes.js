@@ -8,6 +8,7 @@ const {
   deactivateRestById,
   reactivateRestById,
   topFiveRests,
+  restrictToRestOwnerMW,
 } = require('../controllers/restController');
 const { protectMW } = require('../controllers/authController');
 
@@ -59,6 +60,7 @@ router
   .get(getAllRests)
   .post(
     protectMW,
+    restrictToRestOwnerMW,
 
     upload.fields([
       { name: 'logo', maxCount: 1 },
@@ -71,7 +73,7 @@ router
 router
   .route('/:id')
   .get(getRestById)
-  .put(protectMW, updateRestById)
+  .put(protectMW, restrictToRestOwnerMW, updateRestById)
   // update photos only
   .patch(
     protectMW,
@@ -83,10 +85,10 @@ router
 
     updateRestPhotosById,
   )
-  .delete(protectMW, deactivateRestById);
+  .delete(protectMW, restrictToRestOwnerMW, deactivateRestById);
 
 // restore Restaurant
-router.route('/reactivate/:id').put(protectMW, reactivateRestById);
+router.route('/reactivate/:id').put(protectMW, restrictToRestOwnerMW, reactivateRestById);
 
 //   router
 //   .route('/:slug')

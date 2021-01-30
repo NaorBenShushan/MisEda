@@ -1,8 +1,8 @@
 const express = require('express');
 const {
-  updateUserById,
-  updateUserPhotosById,
-  getReviewsByUserId,
+  updateUserData,
+  updateUserPhotos,
+  getMyReviews,
   getAllUsers,
   getUserById,
   deactivateUserById,
@@ -73,12 +73,12 @@ const router = express.Router();
 router
   .route('/my-account')
   // .get(protectMW, getMe)
-  .put(protectMW, updateUserById)
+  .put(protectMW, updateUserData)
   // update photos only
-  .patch(protectMW, upload.single('profilePicture'), updateUserPhotosById);
+  .patch(protectMW, upload.single('profilePicture'), updateUserPhotos);
 
 // USER REVIEWS ROUTES
-router.route('/my-reviews').get(protectMW, getReviewsByUserId);
+router.route('/my-reviews').get(protectMW, getMyReviews);
 
 // AUTH ROUTES
 router.route('/register').post(upload.single('profilePicture'), register);

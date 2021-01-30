@@ -41,8 +41,8 @@ const userSchema = new mongoose.Schema({
   profilePicture: {
     type: String,
     minlength: 4,
-    maxlength: 50,
-    // default: 'uploads/user.png',
+    maxlength: 100,
+    default: 'uploads/default_user.png',
   },
 
   createdAt: {

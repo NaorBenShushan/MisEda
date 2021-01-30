@@ -154,9 +154,6 @@ async function validateRest(rest) {
       .min(7, 'הקישור לאתר קצר מדי')
       .max(255, 'הקישור לאתר ארוך מדי')
       .url(),
-
-    // ADD LOGO VALIDATION (MULTER)
-    // ADD GALLERY VALIDATION (MULTER)
   });
 
   // check validity
@@ -189,9 +186,6 @@ exports.getAllRests = async (req, res) => {
  **************************************************/
 exports.createRest = async (req, res) => {
   try {
-    // create gallery paths array
-    let galleryPaths = req.files.gallery.map((gal) => gal.path);
-
     // create object to create - therefore no need to clean
     let newRest = {
       name: req.body.name,
@@ -236,15 +230,27 @@ exports.createRest = async (req, res) => {
       },
       menu: req.body.menu,
       website: req.body.website,
-      logo: req.files.logo[0].path,
-      gallery: galleryPaths,
     };
 
     // validate body
     await validateRest(newRest);
 
-    // restrict to rest owners only
-    if (!req.user.restOwner) return res.status(401).send('אין לך הרשאות לבצע פעולה זו');
+    // if user didn't send gallery - set default
+    let galleryPaths;
+    if (!req.files.gallery) {
+      galleryPaths = ['uploads/default_rest.png'];
+    } else {
+      // create gallery paths array
+      galleryPaths = req.files.gallery.map((gal) => gal.path);
+    }
+    newRest.gallery = galleryPaths;
+
+    // if user didn't send logo - set default
+    if (!req.files.logo) {
+      newRest.logo = 'uploads/default_rest.png';
+    } else {
+      newRest.logo = req.files.logo[0].path;
+    }
 
     // getting user from protect MW and adding it to the rest object
     newRest.ownerId = req.user._id;
@@ -372,20 +378,20 @@ exports.updateRestPhotosById = async (req, res) => {
       let oldLogo = rest.logo;
       let oldGallery = [...rest.gallery];
 
-      // delete with fs
-      fs.unlink(path.normalize(oldLogo), (err) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-      });
+      // prevent delete of default photos
+      if (oldLogo !== 'uploads/default_rest.png') {
+        // delete with fs
+        fs.unlink(path.normalize(oldLogo), (err) => {
+          if (err) return;
+        });
+      }
 
       oldGallery.forEach((photo) => {
+        // prevent delete of default photos
+        if (photo === 'uploads/default_rest.png') return;
+
         fs.unlink(path.normalize(photo), (err) => {
-          if (err) {
-            console.error(err);
-            return;
-          }
+          if (err) return;
         });
       });
     }
@@ -406,7 +412,7 @@ exports.updateRestPhotosById = async (req, res) => {
 };
 
 /**************************************************
- ************* DELETE RESTAURANT BY ID ************
+ *********** DEACTIVATE RESTAURANT BY ID **********
  **************************************************/
 exports.deactivateRestById = async (req, res) => {
   try {
@@ -419,13 +425,13 @@ exports.deactivateRestById = async (req, res) => {
       { active: false },
     );
 
-    // if this rest is already deleted => send error
-    if (rest.active === false) return res.status(400).send('המסעדה נמחקה כבר');
-
     // if failed:
     // 1. not the same owner
     // 2. rest does not exist
     if (!rest) return res.status(404).send('!!!המסעדה לא נמצאה');
+
+    // if this rest is already deleted => send error
+    if (rest.active === false) return res.status(400).send('המסעדה לא אקטיבית');
 
     // everything is OK, send response
     res.status(200).send('המסעדה נמחקה בהצלחה');
@@ -469,6 +475,16 @@ exports.reactivateRestById = async (req, res) => {
 exports.topFiveRests = (req, res, next) => {
   req.query.limit = '5';
   req.query.sort = 'ratingsAverage';
+
+  next();
+};
+
+/**************************************************
+ ******* RESTRICT TO RESTAURANT OWNER - MW ********
+ **************************************************/
+exports.restrictToRestOwnerMW = (req, res, next) => {
+  if (!req.user.restOwner)
+    return res.status(403).send('אתה לא בעלים של מסעדה, אין לך הרשאות לבצע פעולה זו.');
 
   next();
 };

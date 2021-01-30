@@ -49,6 +49,7 @@ exports.login = async (req, res) => {
     // Validate body
     await validateUserOnLogin(req.body);
 
+    // destructure email and password from body
     const { email, password } = req.body;
 
     // 1) check if email && password exists
@@ -90,7 +91,7 @@ exports.protectMW = async (req, res, next) => {
 
     if (!token) return res.status(401).send('אנא התחבר כדי לקבל גישה לעמוד זה');
 
-    // 2) Verification token
+    // 2) Verify token
     const decoded = jwt.verify(token, process.env.JWTKEY);
 
     // 3) Check if user still exists
