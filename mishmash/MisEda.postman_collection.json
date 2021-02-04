@@ -1,0 +1,236 @@
+{
+	"info": {
+		"_postman_id": "1434c88a-9754-4854-8f2b-2f7ba18e0568",
+		"name": "MisEda",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Restaurants",
+			"item": [
+				{
+					"name": "Get All Rests",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8181/restaurants/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8181",
+							"path": [
+								"restaurants",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Rest",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"     123456    \",\r\n  \"address\": {\r\n      \"city\": \"אשדוד\",\r\n      \"street\": \"12345678901234567890\",\r\n      \"number\": 23\r\n  },\r\n  \"phone\": \"088647392\",\r\n  \"description\": \"מסעדה גיאורגית שמבשלת בלי הרבה שמן!\",\r\n  \"community\": \"                                 גיאורגית   \",\r\n  \"kosher\": true,\r\n  \"openingHours\": {\r\n    \"sunday\": {\r\n      \"open\": 8,\r\n      \"close\": 17\r\n    },\r\n    \"monday\": {\r\n      \"open\": 8,\r\n      \"close\": 17\r\n    },\r\n    \"tuesday\": {\r\n      \"open\": 8,\r\n      \"close\": 17\r\n    },\r\n    \"wednesday\": {\r\n      \"open\": 8,\r\n      \"close\": 17\r\n    },\r\n    \"thursday\": {\r\n      \"open\": 8,\r\n      \"close\": 17.25\r\n    },\r\n    \"friday\": {\r\n      \"open\": 8.75,\r\n      \"close\": 14.5\r\n    },\r\n    \"saturday\": {\r\n      \"open\": 0,\r\n      \"close\": 0\r\n    }\r\n  },\r\n  \"menu\": \"    http://www.deda.co.il/menu   \",\r\n  \"website\": \"  http://www.deda.co.il\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8181/restaurants",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8181",
+							"path": [
+								"restaurants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Rest By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8181/restaurants/60087ee02a9d37310cfb0db6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8181",
+							"path": [
+								"restaurants",
+								"60087ee02a9d37310cfb0db6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Rest By ID",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"     123456    \",\r\n  \"address\": {\r\n      \"city\": \"תל אביב\",\r\n      \"street\": \"12345678901234567890\",\r\n      \"number\": 23\r\n  },\r\n  \"phone\": \"088647392\",\r\n  \"description\": \"מסעדה גיאורגית שמבשלת בלי הרבה שמן!\",\r\n  \"community\": \"                                 גיאורגית   \",\r\n  \"kosher\": true,\r\n  \"openingHours\": {\r\n    \"sunday\": {\r\n      \"open\": 8,\r\n      \"close\": 17\r\n    },\r\n    \"monday\": {\r\n      \"open\": 8,\r\n      \"close\": 17\r\n    },\r\n    \"tuesday\": {\r\n      \"open\": 8,\r\n      \"close\": 17\r\n    },\r\n    \"wednesday\": {\r\n      \"open\": 8,\r\n      \"close\": 17\r\n    },\r\n    \"thursday\": {\r\n      \"open\": 8,\r\n      \"close\": 17.25\r\n    },\r\n    \"friday\": {\r\n      \"open\": 8.75,\r\n      \"close\": 14.5\r\n    },\r\n    \"saturday\": {\r\n      \"open\": 0,\r\n      \"close\": 0\r\n    }\r\n  },\r\n  \"menu\": \"    http://www.deda.co.il/menu   \",\r\n  \"website\": \"  http://www.deda.co.il\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8181/restaurants/60087f882a9d37310cfb0db7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8181",
+							"path": [
+								"restaurants",
+								"60087f882a9d37310cfb0db7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Rest By ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8181/restaurants/600a8359ce93a22378679b14",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8181",
+							"path": [
+								"restaurants",
+								"600a8359ce93a22378679b14"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8181/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8181",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"נאור\",\r\n  \"lastName\": \"בן שושן\",\r\n  \"email\": \"naor3@gmail.com\",\r\n  \"password\": \"123456789\",\r\n  \"restOwner\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8181/users/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8181",
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"naor3@gmail.com\",\r\n  \"password\": \"123456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8181/users/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8181",
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

@@ -1,0 +1,46 @@
+{
+  "name": "דדה",
+  "address": "האורגים 7, אשדוד",
+  "phone": "088647392",
+  "description": "מסעדה גיאורגית שמבשלת בלי הרבה שמן!",
+  "community": "גיאורגית",
+  "kosher": true,
+  "openingHours": {
+    "sunday": {
+      "open": 8,
+      "close": 17
+    },
+    "monday": {
+      "open": 8,
+      "close": 17
+    },
+    "tuesday": {
+      "open": 8,
+      "close": 17
+    },
+    "wednesday": {
+      "open": 8,
+      "close": 17
+    },
+    "thursday": {
+      "open": 8,
+      "close": 17
+    },
+    "friday": {
+      "open": 8,
+      "close": 14.5
+    },
+    "saturday": {
+      "open": 0,
+      "close": 0
+    }
+  },
+  "menu": "http://www.deda.co.il/menu",
+  "website": "http://www.deda.co.il/",
+  "logo": "http://www.deda.co.il/image.jpg",
+  "gallery": ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"],
+  "ownerId": "(ref) 5fdf28d668df51315c9911f2",
+
+  "rating": "average of all reviews (Jonas course)",
+  "active": false
+}
