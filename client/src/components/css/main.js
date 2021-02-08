@@ -1,20 +1,7 @@
 import { makeStyles, fade } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
-import homeSlider from '../images/homeSliderOpacity50p.png';
-
-
 
 export const useStyles = makeStyles((theme) => ({
-  backgroundImage: {
-    position: 'absolute',
-    backgroundImage: `url(${homeSlider})`,
-    height: '54.5rem',
-    objectFit: 'cover',
-    zIndex: -500,
-  },
-  homeSliderText: {
-    textAlign: 'left',
-  },
   homeSliderTitleText: {
     fontFamily: 'Suez One',
     marginLeft: theme.spacing(8),
@@ -22,6 +9,7 @@ export const useStyles = makeStyles((theme) => ({
     color: '#145B78',
     textShadow: '2px 2px 5px #ffffff',
   },
+
   homeSliderSmallTitleText: {
     fontFamily: 'Suez One',
     marginLeft: theme.spacing(8),

@@ -1,3 +1,9 @@
 .MuiButton-label {
   direction: ltr;
 }
+
+body {
+  background: url(components/images/backgroundLongImage.jpg);
+  background-size: cover;
+  height: 100%;
+}

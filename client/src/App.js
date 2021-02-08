@@ -15,7 +15,6 @@ import Register from './components/register';
 import Home from './components/home';
 import Footer from './components/footer';
 import Navbar from './components/navbar';
-import Background from './components/common/background';
 import { Route } from 'react-router-dom';
 import {
   StylesProvider,
@@ -44,7 +43,6 @@ function App() {
         </header>
 
         <main className="minHeight">
-          <Background />
           <Route path="/my-rests" component={MyRests} />
           <Route path="/reviews" component={Reviews} />
           <Route path="/favorites" component={Favorites} />

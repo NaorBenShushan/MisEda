@@ -16,7 +16,7 @@ export default function Home() {
   return (
     <div className={classes.body}>
       <Typography>
-        <CardContent className={classes.homeSliderText}>
+        <CardContent>
           <Typography className={classes.homeSliderTitleText}>
             ברוכים הבאים למִסְעֵדָה
           </Typography>
@@ -66,6 +66,18 @@ export default function Home() {
             <RankedRest />
             <RankedRest />
             <RankedRest />
+            <RankedRest />
+            <RankedRest />
+            <RankedRest />
+            <RankedRest />
+            <RankedRest />
+            <RankedRest />
+            <RankedRest />
+            <RankedRest />
+            <RankedRest />
+            <RankedRest />
+            <RankedRest />
+            <RankedRest />
           </Grid>
         </CardContent>
       </Typography>
@@ -76,9 +88,7 @@ export default function Home() {
           direction="row"
           justify="flex-start"
           alignItems="flex-start"
-        >
-          <RankedRest />
-        </Grid>
+        ></Grid>
       </Typography>
     </div>
   );
