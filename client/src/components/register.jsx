@@ -76,11 +76,10 @@ export default function Register() {
       container
       direction="row"
       justify="center"
-      // alignItems="center"
-      className={classes.registerContainer}
+      className={classes.formContainer}
     >
       <Grid item>
-        <Paper elevation={24} className={classes.registerPaperClass}>
+        <Paper className={classes.formPaperClass}>
           {/*  <pre>
             {firstName} <br />
             {lastName} <br />
@@ -93,12 +92,13 @@ export default function Register() {
             // onSubmit={this.handleSubmit}
             method="POST"
             autoComplete="off"
-            className={classes.form}
           >
-            <Typography variant="h6">נא הירשם כדי להיות חלק ממסעדה!</Typography>
+            <Typography className={classes.formTitle}>
+              הירשם כדי להיות חלק ממִסְעֵדָה!
+            </Typography>
 
             <TextField
-              className={classes.registerInput}
+              className={classes.formInput}
               id="outlined-basic"
               label="שם פרטי"
               variant="outlined"
@@ -107,7 +107,7 @@ export default function Register() {
             />
 
             <TextField
-              className={classes.registerInput}
+              className={classes.formInput}
               id="outlined-basic"
               label="שם משפחה"
               variant="outlined"
@@ -116,7 +116,7 @@ export default function Register() {
             />
 
             <TextField
-              className={classes.registerInput}
+              className={classes.formInput}
               id="outlined-basic"
               label="אימייל"
               variant="outlined"
@@ -126,7 +126,7 @@ export default function Register() {
             <br />
 
             <TextField
-              className={classes.registerInput}
+              className={classes.formInput}
               id="outlined-basic"
               label="סיסמה"
               variant="outlined"
@@ -140,7 +140,7 @@ export default function Register() {
             <FormControl
               style={{ minWidth: '222px' }}
               variant="outlined"
-              className={classes.registerFormControl}
+              className={classes.formFormControl}
             >
               <InputLabel id="demo-simple-select-outlined-label">
                 בעלים של מסעדה?
@@ -159,7 +159,7 @@ export default function Register() {
             <br />
 
             <input
-              className={classes.registerInput}
+              className={classes.formInput}
               accept="image/*"
               id="contained-button-file"
               type="file"
@@ -175,21 +175,21 @@ export default function Register() {
             />
             <label htmlFor="contained-button-file">
               <Button
-                /*    className={
-                  (classes.registerInput, classes.registerUploadButton)
-                } */
                 classes={{
-                  root: classes.registerUploadButtonRoot,
+                  root: classes.formUploadButton,
                   hover: classes.uploadButtonHover,
                 }}
                 variant="contained"
                 component="span"
                 endIcon={
                   <CloudUploadIcon
-                    style={{ minWidth: '40px', marginRight: 0 }}
+                    style={{
+                      minWidth: '40px',
+                      marginRight: '-20px',
+                      fontSize: 23,
+                    }}
                   />
                 }
-                // innerDivStyle={{ paddingRight: 60 }}
               >
                 העלה תמונת פרופיל
               </Button>
@@ -200,12 +200,19 @@ export default function Register() {
             <Button
               variant="contained"
               color="secondary"
-              size="large"
               classes={{
-                root: classes.registerButton,
-                hover: classes.registerButtonHover,
+                root: classes.formSendButton,
+                hover: classes.formButtonHover,
               }}
-              endIcon={<SendIcon />}
+              startIcon={
+                <SendIcon
+                  style={{
+                    fontSize: 22,
+                    marginRight: '15px',
+                    transform: 'rotate(205deg)',
+                  }}
+                />
+              }
             >
               שלח
             </Button>

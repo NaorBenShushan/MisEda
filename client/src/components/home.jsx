@@ -14,39 +14,43 @@ export default function Home() {
   const classes = useStyles();
 
   return (
-    <div className={classes.body}>
-      <Typography>
-        <CardContent>
+    <div>
+      <Grid container justify="flex-end">
+        <Grid item>
           <Typography className={classes.homeSliderTitleText}>
             ברוכים הבאים למִסְעֵדָה
           </Typography>
-          <Grid container justify="space-between" alignItems="center">
-            <Grid item>
-              <Paper className={classes.homeSearchContainer}>
-                {/* Search Input */}
-                <div className={classes.homeSearch}>
-                  <div className={classes.homeSearchIcon}>
-                    <SearchIcon />
-                  </div>
-                  <InputBase
-                    placeholder="חפשו מסעדה..."
-                    classes={{
-                      root: classes.homeInputRoot,
-                      input: classes.homeInputInput,
-                    }}
-                    inputProps={{ 'aria-label': 'search' }}
-                  />
+        </Grid>
+        <br />
+        <Grid container justify="space-between">
+          {/* Search Input */}
+          <Grid item>
+            <Paper className={classes.homeSearchContainer}>
+              {/* Search Input */}
+              <div className={classes.homeSearch}>
+                <div className={classes.homeSearchIcon}>
+                  <SearchIcon />
                 </div>
-              </Paper>
-            </Grid>
-            <Grid item>
-              <Typography className={classes.homeSliderSmallTitleText}>
-                חיפוש מסעדות לפי עדות
-              </Typography>
-            </Grid>
+                <InputBase
+                  placeholder="חפשו מסעדה..."
+                  classes={{
+                    root: classes.homeInputRoot,
+                    input: classes.homeInputInput,
+                  }}
+                  inputProps={{ 'aria-label': 'search' }}
+                />
+              </div>
+            </Paper>
           </Grid>
-        </CardContent>
-      </Typography>
+
+          {/* Sub Title */}
+          <Grid item>
+            <Typography className={classes.homeSliderSmallTitleText}>
+              חיפוש מסעדות לפי עדות
+            </Typography>
+          </Grid>
+        </Grid>
+      </Grid>
 
       <Typography>
         <CardContent>
@@ -58,7 +62,7 @@ export default function Home() {
             container
             spacing={2}
             direction="row"
-            justify="flex-start"
+            justify="center"
             alignItems="flex-start"
           >
             <RankedRest />

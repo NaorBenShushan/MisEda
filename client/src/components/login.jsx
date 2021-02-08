@@ -61,26 +61,23 @@ export default function Login() {
       container
       direction="row"
       justify="center"
-      className={classes.registerContainer}
+      className={classes.formContainer}
     >
       <Grid item>
-        <Paper elevation={24} className={classes.registerPaperClass}>
-          <pre>
+        <Paper className={classes.formPaperClass}>
+          {/* <pre>
             {email} <br />
             {password} <br />
-          </pre>
+          </pre> */}
           <form
             // onSubmit={this.handleSubmit}
             method="POST"
             autoComplete="off"
-            className={classes.form}
           >
-            <Typography variant="h6" className={classes.root}>
-              התחברות
-            </Typography>
+            <Typography className={classes.formTitle}>התחברות</Typography>
 
             <TextField
-              className={classes.registerInput}
+              className={classes.formInput}
               id="outlined-basic"
               label="אימייל"
               variant="outlined"
@@ -90,7 +87,7 @@ export default function Login() {
             <br />
 
             <TextField
-              className={classes.registerInput}
+              className={classes.formInput}
               id="outlined-basic"
               label="סיסמה"
               variant="outlined"
@@ -105,10 +102,18 @@ export default function Login() {
               color="secondary"
               size="large"
               classes={{
-                root: classes.registerButton,
-                hover: classes.registerButtonHover,
+                root: classes.formSendButton,
+                hover: classes.formButtonHover,
               }}
-              endIcon={<SendIcon />}
+              startIcon={
+                <SendIcon
+                  style={{
+                    fontSize: 22,
+                    marginRight: '15px',
+                    transform: 'rotate(205deg)',
+                  }}
+                />
+              }
             >
               התחבר
             </Button>
