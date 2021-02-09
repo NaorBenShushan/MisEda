@@ -9,7 +9,7 @@ import { create } from 'jss';
 import MyRests from './components/myRests';
 import Reviews from './components/reviews';
 import Favorites from './components/favorites';
-import MyAccount from './components/reviews';
+import MyAccount from './components/myAccount';
 import Login from './components/login';
 import Register from './components/register';
 import Home from './components/home';

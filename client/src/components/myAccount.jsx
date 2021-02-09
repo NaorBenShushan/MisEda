@@ -25,11 +25,11 @@ export default function MyAccount() {
       alignItems="center"
       className={classes.registerContainer}
     >
-      <Grid item>
+      <Grid item style={{ width: '80%', minHeight: '60ch' }}>
         <Typography variant="h2" className={classes.root}>
           החשבון שלי
         </Typography>
-        <Paper elevation={24} className={classes.registerPaperClass}>
+        <Paper>
           <Typography variant="h6" className={classes.root}>
             אהלן. אלה המסעדות שלך:
           </Typography>
