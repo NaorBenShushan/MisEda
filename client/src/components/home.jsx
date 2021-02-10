@@ -1,10 +1,4 @@
-import {
-  CardContent,
-  Grid,
-  InputBase,
-  Paper,
-  Typography,
-} from '@material-ui/core';
+import { CardContent, Grid, InputBase, Paper, Typography } from '@material-ui/core';
 import React from 'react';
 import { useStyles } from './css/main';
 import RestCard from './common/restCard';
@@ -15,14 +9,12 @@ export default function Home() {
 
   return (
     <React.Fragment>
-      <Grid container justify="flex-end">
+      <Grid container justify='flex-end'>
         <Grid item>
-          <Typography className={classes.homeSliderTitleText}>
-            ברוכים הבאים למִסְעֵדָה
-          </Typography>
+          <Typography className={classes.homeSliderTitleText}>ברוכים הבאים למִסְעֵדָה</Typography>
         </Grid>
         <br />
-        <Grid container justify="space-between">
+        <Grid container justify='space-between'>
           {/* Search Input */}
           <Grid item>
             <Paper className={classes.homeSearchContainer}>
@@ -32,7 +24,7 @@ export default function Home() {
                   <SearchIcon />
                 </div>
                 <InputBase
-                  placeholder="חפשו מסעדה..."
+                  placeholder='חפשו מסעדה...'
                   classes={{
                     root: classes.homeInputRoot,
                     input: classes.homeInputInput,
@@ -52,32 +44,22 @@ export default function Home() {
         </Grid>
       </Grid>
 
-      <Typography>
-        <CardContent>
-          <Typography className={classes.homeRankTitleText}>
-            חמש המסעדות המדורגות ביותר:
-          </Typography>
+      <CardContent>
+        <Typography className={classes.homeRankTitleText}>חמש המסעדות המדורגות ביותר:</Typography>
 
-          <Grid
-            container
-            spacing={2}
-            direction="row"
-            justify="center"
-            alignItems="flex-start"
-          >
-            <RestCard />
-            <RestCard />
-            <RestCard />
-            <RestCard />
-            <RestCard />
-            <RestCard />
-            <RestCard />
-            <RestCard />
-            <RestCard />
-            <RestCard />
-          </Grid>
-        </CardContent>
-      </Typography>
+        <Grid container spacing={2} direction='row' justify='center' alignItems='flex-start'>
+          <RestCard />
+          <RestCard />
+          <RestCard />
+          <RestCard />
+          <RestCard />
+          <RestCard />
+          <RestCard />
+          <RestCard />
+          <RestCard />
+          <RestCard />
+        </Grid>
+      </CardContent>
     </React.Fragment>
   );
 }

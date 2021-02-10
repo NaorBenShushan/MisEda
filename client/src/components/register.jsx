@@ -30,13 +30,10 @@ const INITIAL_STATE = {
 };
 
 export default function Register() {
-  const {
-    handleSubmit,
-    handleChange,
-    values,
-    errors,
-    isSubmitting,
-  } = useFormValidation(INITIAL_STATE, validateOnRegister);
+  const { handleSubmit, handleChange, values, errors, isSubmitting } = useFormValidation(
+    INITIAL_STATE,
+    validateOnRegister,
+  );
   const classes = useStyles();
 
   const doSubmit = (values) => {
@@ -49,78 +46,62 @@ export default function Register() {
     formData.append('restOwner', values.restOwner);
     formData.append('profilePicture', values.profilePicture);
 
-    console.log(formData.firstName);
+    console.log(Array.from(formData));
   };
 
   return (
-    <Grid
-      container
-      direction="row"
-      justify="center"
-      className={classes.formContainer}
-    >
+    <Grid container direction='row' justify='center' className={classes.formContainer}>
       <Grid item>
         <Paper className={classes.formPaperClass}>
           <form
             // onSubmit={this.handleSubmit}
-            method="POST"
-            autoComplete="off"
-          >
-            <Typography className={classes.formTitle}>
-              הירשם כדי להיות חלק ממִסְעֵדָה!
-            </Typography>
+            method='POST'
+            autoComplete='off'>
+            <Typography className={classes.formTitle}>הירשם כדי להיות חלק ממִסְעֵדָה!</Typography>
 
             <TextField
               className={classes.formInput}
-              id="outlined-basic"
-              label="שם פרטי"
-              variant="outlined"
+              id='outlined-basic'
+              label='שם פרטי'
+              variant='outlined'
               value={values.firstName}
-              name="firstName"
+              name='firstName'
               onChange={handleChange}
             />
-            {errors.firstName && (
-              <p className={classes.errorText}>{errors.firstName}</p>
-            )}
+            {errors.firstName && <p className={classes.errorText}>{errors.firstName}</p>}
 
             <TextField
               className={classes.formInput}
-              id="outlined-basic"
-              label="שם משפחה"
-              variant="outlined"
+              id='outlined-basic'
+              label='שם משפחה'
+              variant='outlined'
               value={values.lastName}
-              name="lastName"
+              name='lastName'
               onChange={handleChange}
             />
-            {errors.lastName && (
-              <p className={classes.errorText}>{errors.lastName}</p>
-            )}
+            {errors.lastName && <p className={classes.errorText}>{errors.lastName}</p>}
 
             <TextField
               className={classes.formInput}
-              id="outlined-basic"
-              label="אימייל"
-              variant="outlined"
+              id='outlined-basic'
+              label='אימייל'
+              variant='outlined'
               value={values.email}
-              name="email"
+              name='email'
               onChange={handleChange}
             />
-            {errors.email && (
-              <p className={classes.errorText}>{errors.email}</p>
-            )}
+            {errors.email && <p className={classes.errorText}>{errors.email}</p>}
 
             <TextField
               className={classes.formInput}
-              id="outlined-basic"
-              label="סיסמה"
-              variant="outlined"
+              id='outlined-basic'
+              label='סיסמה'
+              variant='outlined'
               value={values.password}
-              name="password"
+              name='password'
               onChange={handleChange}
             />
-            {errors.password && (
-              <p className={classes.errorText}>{errors.password}</p>
-            )}
+            {errors.password && <p className={classes.errorText}>{errors.password}</p>}
 
             <br />
 
@@ -128,20 +109,16 @@ export default function Register() {
 
             <FormControl
               style={{ minWidth: '222px' }}
-              variant="outlined"
-              className={classes.formFormControl}
-            >
-              <InputLabel id="demo-simple-select-outlined-label">
-                בעלים של מסעדה?
-              </InputLabel>
+              variant='outlined'
+              className={classes.formFormControl}>
+              <InputLabel id='demo-simple-select-outlined-label'>בעלים של מסעדה?</InputLabel>
               <Select
-                labelId="demo-simple-select-outlined-label"
-                id="demo-simple-select-outlined"
+                labelId='demo-simple-select-outlined-label'
+                id='demo-simple-select-outlined'
                 value={values.restOwner}
-                name="restOwner"
+                name='restOwner'
                 onChange={handleChange}
-                label="בעלים של מסעדה?"
-              >
+                label='בעלים של מסעדה?'>
                 <MenuItem value={true}>כן</MenuItem>
                 <MenuItem value={false}>לא</MenuItem>
               </Select>
@@ -150,21 +127,21 @@ export default function Register() {
 
             <input
               className={classes.formInput}
-              accept="image/*"
-              id="contained-button-file"
-              type="file"
+              accept='image/*'
+              id='contained-button-file'
+              type='file'
               style={{ display: 'none' }}
-              name="profilePicture"
+              name='profilePicture'
               onChange={handleChange}
             />
-            <label htmlFor="contained-button-file">
+            <label htmlFor='contained-button-file'>
               <Button
                 classes={{
                   root: classes.formUploadButton,
                   hover: classes.uploadButtonHover,
                 }}
-                variant="contained"
-                component="span"
+                variant='contained'
+                component='span'
                 endIcon={
                   <CloudUploadIcon
                     style={{
@@ -173,8 +150,7 @@ export default function Register() {
                       fontSize: 23,
                     }}
                   />
-                }
-              >
+                }>
                 העלה תמונת פרופיל
               </Button>
             </label>
@@ -182,9 +158,9 @@ export default function Register() {
             <br />
             {/* Send */}
             <Button
-              variant="contained"
-              color="secondary"
-              type="submit"
+              variant='contained'
+              color='secondary'
+              type='submit'
               disabled={isSubmitting}
               onClick={(e) => handleSubmit(e, doSubmit)}
               classes={{
@@ -199,8 +175,7 @@ export default function Register() {
                     transform: 'rotate(205deg)',
                   }}
                 />
-              }
-            >
+              }>
               שלח
             </Button>
           </form>
