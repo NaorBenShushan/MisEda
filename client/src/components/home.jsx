@@ -7,14 +7,14 @@ import {
 } from '@material-ui/core';
 import React from 'react';
 import { useStyles } from './css/main';
-import RankedRest from './common/rankedRest';
+import RestCard from './common/restCard';
 import SearchIcon from '@material-ui/icons/Search';
 
 export default function Home() {
   const classes = useStyles();
 
   return (
-    <div>
+    <React.Fragment>
       <Grid container justify="flex-end">
         <Grid item>
           <Typography className={classes.homeSliderTitleText}>
@@ -65,35 +65,19 @@ export default function Home() {
             justify="center"
             alignItems="flex-start"
           >
-            <RankedRest />
-            <RankedRest />
-            <RankedRest />
-            <RankedRest />
-            <RankedRest />
-            <RankedRest />
-            <RankedRest />
-            <RankedRest />
-            <RankedRest />
-            <RankedRest />
-            <RankedRest />
-            <RankedRest />
-            <RankedRest />
-            <RankedRest />
-            <RankedRest />
-            <RankedRest />
-            <RankedRest />
+            <RestCard />
+            <RestCard />
+            <RestCard />
+            <RestCard />
+            <RestCard />
+            <RestCard />
+            <RestCard />
+            <RestCard />
+            <RestCard />
+            <RestCard />
           </Grid>
         </CardContent>
       </Typography>
-      <Typography>
-        <Grid
-          container
-          spacing={2}
-          direction="row"
-          justify="flex-start"
-          alignItems="flex-start"
-        ></Grid>
-      </Typography>
-    </div>
+    </React.Fragment>
   );
 }

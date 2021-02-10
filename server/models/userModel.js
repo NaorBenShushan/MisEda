@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
     required: [true, 'ציין אימייל'],
     trim: true,
     minlength: [6, 'אימייל לא תקין'],
-    maxlength: [25, 'אימייל לא תקין'],
+    maxlength: [30, 'אימייל לא תקין'],
     lowercase: true,
     unique: [true, 'אימייל קיים במערכת'],
   },
@@ -68,12 +68,18 @@ const userSchema = new mongoose.Schema({
   favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Restaurants' }],
 });
 
-userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
+userSchema.methods.correctPassword = async function (
+  candidatePassword,
+  userPassword
+) {
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
 userSchema.methods.generateAuthToken = function () {
-  const token = jwt.sign({ _id: this._id, restOwner: this.restOwner }, process.env.JWTKEY);
+  const token = jwt.sign(
+    { _id: this._id, restOwner: this.restOwner },
+    process.env.JWTKEY
+  );
 
   return token;
 };

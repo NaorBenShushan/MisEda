@@ -1,4 +1,5 @@
 import { makeStyles, fade } from '@material-ui/core/styles';
+import { red } from '@material-ui/core/colors';
 
 /* SITE COLORS */
 // light-red: #AB2D45
@@ -81,6 +82,70 @@ export const useStyles = makeStyles((theme) => ({
   /* / Search Input */
 
   /* **************************************************
+   ********************* RestCard *************************
+   **************************************************** */
+
+  restCardRoot: {
+    backgroundColor: '#facad3',
+    boxShadow: 'inset 0 0 5px #145B78',
+    opacity: 0.9,
+    maxWidth: 345,
+  },
+  restCardMedia: {
+    margin: '0 auto',
+    /* Desired image size: width: 208, height: 210 */
+    width: '208px',
+    height: '210px',
+    overflow: 'hidden',
+    boxShadow: '0 0 2px 2px #145B78',
+  },
+  restCardExpand: {
+    transform: 'rotate(0deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+  restCardExpandOpen: {
+    transform: 'rotate(180deg)',
+  },
+  restCardAvatar: {
+    backgroundColor: red[500],
+  },
+
+  /* **************************************************
+   *************** My Account RestCard ****************
+   **************************************************** */
+
+  myAcRestCardRoot: {
+    backgroundColor: '#facad3',
+    boxShadow: 'inset 0 0 5px #145B78',
+    opacity: 0.9,
+    maxWidth: 700,
+  },
+  myAcRestCardMedia: {
+    margin: '0 auto',
+    /* Desired image size: width: 208, height: 210 */
+    width: '208px',
+    height: '210px',
+    overflow: 'hidden',
+    boxShadow: '0 0 2px 2px #145B78',
+  },
+  myAcRestCardExpand: {
+    transform: 'rotate(0deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+  myAcRestCardExpandOpen: {
+    transform: 'rotate(180deg)',
+  },
+  myAcRestCardAvatar: {
+    backgroundColor: red[500],
+  },
+
+  /* **************************************************
    ********************* FORM *************************
    **************************************************** */
   formContainer: {
@@ -89,9 +154,10 @@ export const useStyles = makeStyles((theme) => ({
 
   formTitle: {
     fontFamily: 'Suez One',
-    marginRight: theme.spacing(8),
-    color: '#AB2D45',
     fontSize: '1.7rem',
+    marginRight: theme.spacing(8),
+    marginBottom: theme.spacing(1),
+    color: '#AB2D45',
     width: '100%',
   },
 
@@ -141,6 +207,22 @@ export const useStyles = makeStyles((theme) => ({
     fontSize: 22,
     marginRight: '15px',
     transform: 'rotate(205deg)',
-  }
+  },
 
+  errorText: {
+    fontFamily: 'Tahoma',
+    margin: '0 0 4px 0',
+    padding: 0,
+    color: 'red',
+    fontStyle: 'bold',
+    fontSize: '0.7rem',
+  },
+
+  /* **************************************************
+   ********************* My Account *******************
+   **************************************************** */
+
+  myAccountInputs: {
+    margin: '10px',
+  },
 }));

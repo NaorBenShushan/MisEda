@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Button,
   FormControl,
@@ -10,65 +10,46 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
+// import { CloudUploadIcon, SendIcon } from '@material-ui/icons';
 
-import * as yup from 'yup';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import SendIcon from '@material-ui/icons/Send';
 
+import useFormValidation from './useFormValidation';
+import validateOnRegister from './validateOnRegister';
+
 import { useStyles } from './css/main';
 
+const INITIAL_STATE = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
+  restOwner: false,
+  profilePicture: '',
+};
+
 export default function Register() {
+  const {
+    handleSubmit,
+    handleChange,
+    values,
+    errors,
+    isSubmitting,
+  } = useFormValidation(INITIAL_STATE, validateOnRegister);
   const classes = useStyles();
 
-  /* doSubmit = async () => {
-    const { data } = this.state;
-  }; */
+  const doSubmit = (values) => {
+    const formData = new FormData();
+    // console.log(values.firstName);
+    formData.append('firstName', values.firstName);
+    formData.append('lastName', values.lastName);
+    formData.append('email', values.email);
+    formData.append('password', values.password);
+    formData.append('restOwner', values.restOwner);
+    formData.append('profilePicture', values.profilePicture);
 
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [restOwner, setRestOwner] = useState('');
-  const [profilePicture, setProfilePicture] = useState('');
-
-  const validateUserOnRegister = async (user) => {
-    let userSchema = yup.object().shape({
-      firstName: yup
-        .string()
-        .required('יש לציין שם פרטי')
-        .trim()
-        .min(2, 'שם פרטי קצר מדי')
-        .max(15, 'שם פרטי ארוך מדי'),
-
-      lastName: yup
-        .string()
-        .required('יש לציין שם משפחה')
-        .trim()
-        .min(2, 'שם המשפחה קצר מדי')
-        .max(15, 'שם המשפחה ארוך מדי'),
-
-      email: yup
-        .string()
-        .required('יש לציין אימייל')
-        .trim()
-        .min(6, 'האימייל קצר מדי')
-        .max(20, 'האימייל ארוך מדי')
-        .email()
-        .lowercase(),
-
-      password: yup
-        .string()
-        .required('יש לציין סיסמה')
-        .min(8, 'הסיסמה קצרה מדי')
-        .max(20, 'הסיסמה ארוכה מדי'),
-
-      restOwner: yup.boolean().required('יש לציין האם את/ה בעל/ת מסעדה'),
-    });
-
-    // check validity
-
-    // abortEarly make validation for all fields and send all errors instead of one at a time
-    return userSchema.validate(user, { abortEarly: false });
+    console.log(formData.firstName);
   };
 
   return (
@@ -80,14 +61,6 @@ export default function Register() {
     >
       <Grid item>
         <Paper className={classes.formPaperClass}>
-          {/*  <pre>
-            {firstName} <br />
-            {lastName} <br />
-            {email} <br />
-            {password} <br />
-            {restOwner} <br />
-            {profilePicture} <br />
-          </pre> */}
           <form
             // onSubmit={this.handleSubmit}
             method="POST"
@@ -102,39 +75,55 @@ export default function Register() {
               id="outlined-basic"
               label="שם פרטי"
               variant="outlined"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              value={values.firstName}
+              name="firstName"
+              onChange={handleChange}
             />
+            {errors.firstName && (
+              <p className={classes.errorText}>{errors.firstName}</p>
+            )}
 
             <TextField
               className={classes.formInput}
               id="outlined-basic"
               label="שם משפחה"
               variant="outlined"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              value={values.lastName}
+              name="lastName"
+              onChange={handleChange}
             />
+            {errors.lastName && (
+              <p className={classes.errorText}>{errors.lastName}</p>
+            )}
 
             <TextField
               className={classes.formInput}
               id="outlined-basic"
               label="אימייל"
               variant="outlined"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={values.email}
+              name="email"
+              onChange={handleChange}
             />
-            <br />
+            {errors.email && (
+              <p className={classes.errorText}>{errors.email}</p>
+            )}
 
             <TextField
               className={classes.formInput}
               id="outlined-basic"
               label="סיסמה"
               variant="outlined"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={values.password}
+              name="password"
+              onChange={handleChange}
             />
+            {errors.password && (
+              <p className={classes.errorText}>{errors.password}</p>
+            )}
 
             <br />
+
             {/* DROP DOWN SELECT/OPTION */}
 
             <FormControl
@@ -148,8 +137,9 @@ export default function Register() {
               <Select
                 labelId="demo-simple-select-outlined-label"
                 id="demo-simple-select-outlined"
-                value={restOwner}
-                onChange={(e) => setRestOwner(e.target.value)}
+                value={values.restOwner}
+                name="restOwner"
+                onChange={handleChange}
                 label="בעלים של מסעדה?"
               >
                 <MenuItem value={true}>כן</MenuItem>
@@ -164,14 +154,8 @@ export default function Register() {
               id="contained-button-file"
               type="file"
               style={{ display: 'none' }}
-              value={profilePicture}
-              onChange={(e) => {
-                // setProfilePicture(e.target.files[0]);
-                // console.log(e.target.files[0].name);
-                let file = e.target.files[0];
-                // setProfilePicture(file);
-                console.log(file);
-              }}
+              name="profilePicture"
+              onChange={handleChange}
             />
             <label htmlFor="contained-button-file">
               <Button
@@ -200,6 +184,9 @@ export default function Register() {
             <Button
               variant="contained"
               color="secondary"
+              type="submit"
+              disabled={isSubmitting}
+              onClick={(e) => handleSubmit(e, doSubmit)}
               classes={{
                 root: classes.formSendButton,
                 hover: classes.formButtonHover,
