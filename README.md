@@ -1,7 +1,7 @@
 # MisEda
 
-A resturant for Edot
+Collaborators: Doron Michlal-Raz
 
-// Packages: # BackEnd: 1. multer
+Back end - DONE.
 
-    # BackEnd:
+Front end - In the process...
